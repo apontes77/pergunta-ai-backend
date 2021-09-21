@@ -1,4 +1,4 @@
-#Configurações gerais
+# Configurações gerais
 
 A aplicação é escrita em Java, usando o framework Spring.
 Para testes, está configurado o uso do H2, banco em memória.
