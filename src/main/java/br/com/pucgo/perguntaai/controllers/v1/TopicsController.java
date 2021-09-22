@@ -7,6 +7,8 @@ import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.models.form.TopicForm;
 import br.com.pucgo.perguntaai.repositories.CourseRepository;
 import br.com.pucgo.perguntaai.repositories.TopicRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -35,6 +37,7 @@ public class TopicsController {
 
     @GetMapping
     @Cacheable(value = "topicsList")
+    @ApiOperation("obtem todos os tópicos")
     public Page<TopicDto> list(@RequestParam(required = false) String courseName,
                                @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
