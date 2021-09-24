@@ -5,10 +5,8 @@ import br.com.pucgo.perguntaai.models.DTO.TopicDtoDetails;
 import br.com.pucgo.perguntaai.models.DTO.TopicFormUpdate;
 import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.models.form.TopicForm;
-import br.com.pucgo.perguntaai.repositories.CourseRepository;
 import br.com.pucgo.perguntaai.repositories.TopicRepository;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,21 +30,18 @@ public class TopicsController {
     @Autowired
     private TopicRepository topicRepository;
 
-    @Autowired
-    private CourseRepository courseRepository;
-
     @GetMapping
     @Cacheable(value = "topicsList")
     @ApiOperation("obtem todos os tópicos")
-    public Page<TopicDto> list(@RequestParam(required = false) String courseName,
+    public Page<TopicDto> list(@RequestParam(required = false) String status,
                                @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
         final Page<Topic> topicPage;
-        if(courseName == null) {
+        if(status == null) {
             topicPage = topicRepository.findAll(pagination);
         }
        else {
-            topicPage = topicRepository.findByCourse_Name(courseName, pagination);
+            topicPage = topicRepository.findByStatus(status, pagination);
         }
         return TopicDto.convert(topicPage);
     }
@@ -56,7 +51,7 @@ public class TopicsController {
     @CacheEvict(value = "topicsList", allEntries = true)
     public ResponseEntity<TopicDto> register(@RequestBody @Valid TopicForm topicForm,
                                              UriComponentsBuilder uriBuilder) {
-        Topic topic = topicForm.convert(courseRepository);
+        Topic topic = topicForm.convert();
         topicRepository.save(topic);
 
         URI uri = uriBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();

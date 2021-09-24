@@ -1,14 +1,14 @@
 package br.com.pucgo.perguntaai.models.form;
 
-import br.com.pucgo.perguntaai.models.Course;
+import br.com.pucgo.perguntaai.models.Tag;
 import br.com.pucgo.perguntaai.models.Topic;
-import br.com.pucgo.perguntaai.repositories.CourseRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,10 +23,9 @@ public class TopicForm {
     private String message;
     @NotNull
     @NotEmpty
-    private String nameCourse;
+    private List<Tag> tags;
 
-    public Topic convert(CourseRepository courseRepository) {
-        Course course = courseRepository.findByName(nameCourse);
-        return new Topic(title, message, course);
+    public Topic convert() {
+        return new Topic(title, message, tags);
     }
 }
