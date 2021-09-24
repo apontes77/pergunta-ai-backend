@@ -1,10 +1,13 @@
 package br.com.pucgo.perguntaai.models;
 
+import br.com.pucgo.perguntaai.models.enums.AvatarOptions;
+import br.com.pucgo.perguntaai.models.enums.RoleUser;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,13 +26,14 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String password;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Profile> profiles = new ArrayList<>();
+    private String course;
+    private LocalDateTime birthDate;
+    private AvatarOptions avatarOptions;
+    private RoleUser roleUser;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.profiles;
+        return null;
     }
 
     @Override

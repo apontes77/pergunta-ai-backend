@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Long> {
-    Page<Topic> findByCourse_Name(String courseName, Pageable pagination);
+    Page<Topic> findByStatus(String status, Pageable pagination);
 }

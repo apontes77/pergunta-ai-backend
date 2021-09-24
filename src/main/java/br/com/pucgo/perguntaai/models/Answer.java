@@ -22,4 +22,6 @@ public class Answer {
     @ManyToOne
     private User author;
     private boolean solution = false;
+    @OneToOne
+    private AnswerLike answerLike;
 }

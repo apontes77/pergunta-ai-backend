@@ -23,17 +23,17 @@ public class Topic {
     private LocalDateTime creationDate = LocalDateTime.now();
     @ManyToOne
     private User author;
-    @ManyToOne
-    private Course course;
     @Enumerated(EnumType.STRING)
     private TopicStatus status = TopicStatus.NOT_ANSWERED;
     @OneToMany(mappedBy = "topic")
     private List<Answer> answers = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Tag> tags = new ArrayList<>();
 
 
-    public Topic(String title, String message, Course course) {
+    public Topic(String title, String message, List<Tag> tags) {
         this.title = title;
         this.message = message;
-        this.course = course;
+        this.tags = tags;
     }
 }
