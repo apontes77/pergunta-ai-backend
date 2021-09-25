@@ -70,6 +70,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/v1/topics/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/topics").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/h2-console").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/*").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator").permitAll()
