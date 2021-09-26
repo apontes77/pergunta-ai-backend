@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,7 +23,7 @@ public class TopicForm {
     private String message;
     @NotNull
     @NotEmpty
-    private List<Tag> tags;
+    private Set<Tag> tags;
 
     public Topic convert() {
         return new Topic(title, message, tags);
