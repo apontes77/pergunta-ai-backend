@@ -3,6 +3,8 @@ package br.com.pucgo.perguntaai.models;
 import br.com.pucgo.perguntaai.models.enums.AvatarOptions;
 import br.com.pucgo.perguntaai.models.enums.RoleUser;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,13 +24,21 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "email")
     private String email;
+    @Column(name = "password")
     private String password;
+    @Column(name = "course")
     private String course;
+    @Column(name = "birth_date")
     private LocalDateTime birthDate;
+    @Column(name = "avatar_options")
     private AvatarOptions avatarOptions;
+    @Column(name = "role_user")
     private RoleUser roleUser;
 
     @Override
