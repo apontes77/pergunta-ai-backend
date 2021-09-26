@@ -36,14 +36,19 @@ public class User implements UserDetails {
     private String course;
     @Column(name = "birth_date")
     private LocalDateTime birthDate;
+    @Enumerated(EnumType.STRING)
     @Column(name = "avatar_options")
     private AvatarOptions avatarOptions;
     @Column(name = "role_user")
+    @Enumerated(EnumType.STRING)
     private RoleUser roleUser;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Profile> profiles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.profiles;
     }
 
     @Override

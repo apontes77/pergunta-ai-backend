@@ -1,7 +1,7 @@
 package br.com.pucgo.perguntaai.models.DTO;
 
 import br.com.pucgo.perguntaai.models.Topic;
-import br.com.pucgo.perguntaai.models.TopicStatus;
+import br.com.pucgo.perguntaai.models.enums.TopicStatus;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

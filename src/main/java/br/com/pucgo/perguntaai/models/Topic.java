@@ -1,8 +1,7 @@
 package br.com.pucgo.perguntaai.models;
 
+import br.com.pucgo.perguntaai.models.enums.TopicStatus;
 import lombok.*;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,13 +28,13 @@ public class Topic {
     private TopicStatus status = TopicStatus.NOT_ANSWERED;
     @OneToMany(mappedBy = "topic")
     private List<Answer> answers = new ArrayList<>();
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Tag> tags = new ArrayList<>();
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    private List<Tag> tags = new ArrayList<>();
 
 
     public Topic(String title, String message, List<Tag> tags) {
         this.title = title;
         this.message = message;
-        this.tags = tags;
+      //  this.tags = tags;
     }
 }
