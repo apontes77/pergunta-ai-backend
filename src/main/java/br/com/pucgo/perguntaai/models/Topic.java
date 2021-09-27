@@ -23,30 +23,36 @@ import java.util.Set;
 public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
+
+    @JsonProperty("title")
     private String title;
+
+    @JsonProperty("message")
     private String message;
+
+    @JsonProperty("creationDate")
     private LocalDateTime creationDate = LocalDateTime.now();
+
     @ManyToOne
+    @JsonProperty("author")
     private User author;
+
+    @JsonProperty("status")
     @Enumerated(EnumType.STRING)
     private TopicStatus status = TopicStatus.NOT_ANSWERED;
+
     @OneToMany(mappedBy = "topic")
+    @JsonProperty("answers")
     private List<Answer> answers = new ArrayList<>();
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name="topic_tag",
-    joinColumns = @JoinColumn(name = "topic_id"),
-    inverseJoinColumns = @JoinColumn(name = "tag_id"))
-
     @JsonProperty("tags")
-    private Set<Tag> tags = new HashSet<>();
+    @ElementCollection(targetClass=String.class)
+    private List<String> tags = new ArrayList<>();
 
 
-    public Topic(String title, String message, Set<Tag> tags) {
+    public Topic(String title, String message, List<String> tags) {
         this.title = title;
         this.message = message;
         this.tags = tags;
