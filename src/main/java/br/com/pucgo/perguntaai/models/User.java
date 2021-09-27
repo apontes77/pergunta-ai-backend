@@ -20,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
+@Builder
 @Table(name = "TB_USER")
 public class User implements UserDetails {
     @Id

@@ -10,4 +10,5 @@ public class PerguntaaiBackendApplication {
 		SpringApplication.run(PerguntaaiBackendApplication.class, args);
 	}
 
+
 }

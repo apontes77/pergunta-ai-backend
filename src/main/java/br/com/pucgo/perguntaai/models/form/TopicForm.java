@@ -1,6 +1,5 @@
 package br.com.pucgo.perguntaai.models.form;
 
-import br.com.pucgo.perguntaai.models.Tag;
 import br.com.pucgo.perguntaai.models.Topic;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +7,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +23,7 @@ public class TopicForm {
     private String message;
     @NotNull
     @NotEmpty
-    private Set<Tag> tags;
+    private List<String> tags = new ArrayList<>();
 
     public Topic convert() {
         return new Topic(title, message, tags);
