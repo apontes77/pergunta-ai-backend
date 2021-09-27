@@ -6,7 +6,7 @@ import br.com.pucgo.perguntaai.models.DTO.TopicFormUpdate;
 import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.models.form.TopicForm;
 import br.com.pucgo.perguntaai.repositories.TopicRepository;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,17 +31,16 @@ public class TopicsController {
     @Autowired
     private TopicRepository topicRepository;
 
+    @ApiResponse(description = "retorna os tópicos do fórum")
     @GetMapping
     @Cacheable(value = "topicsList")
-    @ApiOperation("obtem todos os tópicos")
     public Page<TopicDto> list(@RequestParam(required = false) String status,
                                @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
         final Page<Topic> topicPage;
-        if(status == null) {
+        if (status == null) {
             topicPage = topicRepository.findAll(pagination);
-        }
-       else {
+        } else {
             topicPage = topicRepository.findByStatus(status, pagination);
         }
         return TopicDto.convert(topicPage);
@@ -62,7 +62,7 @@ public class TopicsController {
     public ResponseEntity<TopicDtoDetails> detail(@PathVariable("id") Long id) {
         Optional<Topic> topic = topicRepository.findById(id);
         return topic.map(value -> ResponseEntity.ok(new TopicDtoDetails(value)))
-                                    .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
@@ -71,7 +71,7 @@ public class TopicsController {
     public ResponseEntity<TopicDto> update(@PathVariable Long id,
                                            @RequestBody @Valid TopicFormUpdate topicForm) {
         Optional<Topic> topicOptional = topicRepository.findById(id);
-        if(topicOptional.isPresent()) {
+        if (topicOptional.isPresent()) {
             Topic topic = topicForm.update(id, topicRepository);
             return ResponseEntity.ok(new TopicDto(topic));
         }
@@ -83,7 +83,7 @@ public class TopicsController {
     @CacheEvict(value = "topicsList", allEntries = true)
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Topic> topicOptional = topicRepository.findById(id);
-        if(topicOptional.isPresent()) {
+        if (topicOptional.isPresent()) {
             topicRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
