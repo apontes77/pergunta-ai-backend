@@ -20,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
+@Builder
 @Table(name = "TB_USER")
 public class User implements UserDetails {
     @Id
@@ -74,5 +75,12 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public User(String name, String email, String course, String password) {
+        this.name = name;
+        this.email = email;
+        this.course = course;
+        this.password = password;
     }
 }
