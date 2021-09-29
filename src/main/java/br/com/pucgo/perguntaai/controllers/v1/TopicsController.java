@@ -6,7 +6,10 @@ import br.com.pucgo.perguntaai.models.DTO.TopicFormUpdate;
 import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.models.form.TopicForm;
 import br.com.pucgo.perguntaai.repositories.TopicRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,8 +37,9 @@ public class TopicsController {
     @ApiResponse(description = "retorna os tópicos do fórum")
     @GetMapping
     @Cacheable(value = "topicsList")
+    @Operation(summary = "list topics", security = @SecurityRequirement(name = "bearerAuth"))
     public Page<TopicDto> list(@RequestParam(required = false) String status,
-                               @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
+                               @Parameter(hidden = true) @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
         final Page<Topic> topicPage;
         if (status == null) {
@@ -49,6 +53,7 @@ public class TopicsController {
     @PostMapping
     @Transactional
     @CacheEvict(value = "topicsList", allEntries = true)
+    @Operation(summary = "insert topic", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<TopicDto> register(@RequestBody @Valid TopicForm topicForm,
                                              UriComponentsBuilder uriBuilder) {
         Topic topic = topicForm.convert();
@@ -59,6 +64,7 @@ public class TopicsController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "details topic", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<TopicDtoDetails> detail(@PathVariable("id") Long id) {
         Optional<Topic> topic = topicRepository.findById(id);
         return topic.map(value -> ResponseEntity.ok(new TopicDtoDetails(value)))
@@ -68,6 +74,7 @@ public class TopicsController {
     @PutMapping("/{id}")
     @Transactional
     @CacheEvict(value = "topicsList", allEntries = true)
+    @Operation(summary = "update topic", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<TopicDto> update(@PathVariable Long id,
                                            @RequestBody @Valid TopicFormUpdate topicForm) {
         Optional<Topic> topicOptional = topicRepository.findById(id);
@@ -81,6 +88,7 @@ public class TopicsController {
     @DeleteMapping("/{id}")
     @Transactional
     @CacheEvict(value = "topicsList", allEntries = true)
+    @Operation(summary = "delete topic", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Topic> topicOptional = topicRepository.findById(id);
         if (topicOptional.isPresent()) {

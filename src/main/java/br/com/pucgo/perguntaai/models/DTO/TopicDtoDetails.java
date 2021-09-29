@@ -18,6 +18,7 @@ public class TopicDtoDetails {
     private String authorName;
     private TopicStatus status;
     private List<AnswerDto> answers;
+    private List<String> tags;
 
     public TopicDtoDetails (Topic topic) {
         this.id = topic.getId();
@@ -30,5 +31,6 @@ public class TopicDtoDetails {
                                     .stream()
                                     .map(AnswerDto::new)
                                     .collect(Collectors.toList()));
+        this.tags = topic.getTags();
     }
 }

@@ -43,7 +43,8 @@ public class Topic {
     @Enumerated(EnumType.STRING)
     private TopicStatus status = TopicStatus.NOT_ANSWERED;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "answer_id")
     @JsonProperty("answers")
     private List<Answer> answers = new ArrayList<>();
 
