@@ -39,7 +39,7 @@ public class UserController {
         User user = userForm.convert();
         userRepository.save(user);
 
-        URI uri = uriBuilder.path("/api/v1/user/register/{id}").buildAndExpand(user.getId()).toUri();
+        URI uri = uriBuilder.path("/register/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(new UserDto(user));
     }
 }

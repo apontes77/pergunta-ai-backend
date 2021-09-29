@@ -2,10 +2,13 @@ package br.com.pucgo.perguntaai.models.form;
 
 import br.com.pucgo.perguntaai.models.User;
 import com.sun.istack.NotNull;
+import lombok.Builder;
+import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
-
+@Getter
+@Builder
 public class UserForm {
     @NotNull
     @NotEmpty

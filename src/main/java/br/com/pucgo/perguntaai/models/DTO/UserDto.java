@@ -2,7 +2,9 @@ package br.com.pucgo.perguntaai.models.DTO;
 
 
 import br.com.pucgo.perguntaai.models.User;
+import lombok.Getter;
 
+@Getter
 public class UserDto {
     private Long id;
     private String name;
