@@ -4,10 +4,12 @@ import br.com.pucgo.perguntaai.controllers.v1.UserController;
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.services.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -35,6 +37,12 @@ public class RegisterUserTests {
 
         User registerUser = registerUserForm.convert();
 
+        /**
+         * este é um mock da resposta do método saveUser em UserService.
+         *
+         * Para que este mock da resposta do userService funcione,
+         * ele deve corresponder exatamente aos argumentos do método saveUser.
+         */
         when(userService.saveUser(ArgumentMatchers.any(User.class))).thenReturn(registerUser);
 
         UriComponentsBuilder uriComponents = UriComponentsBuilder.fromUriString("localhost:8081/api/v1/user/register/{id}");
