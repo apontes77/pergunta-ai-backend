@@ -25,6 +25,4 @@ public class PerguntaaiBackendApplication {
 				.info(new Info().title("API Pergunta Aí").version("V1")
 						.license(new License().name("Apache 2.0").url("http://springdoc.org")));
 	}
-
-
 }
