@@ -22,7 +22,7 @@ public class PerguntaaiBackendApplication {
 		return new OpenAPI().addServersItem(new Server().url("https://pergunta-ai.azurewebsites.net/"))
 				.components(new Components().addSecuritySchemes("basicScheme",
 						new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
-				.info(new Info().title("SpringShop API").version("V0")
+				.info(new Info().title("API Pergunta Aí").version("V1")
 						.license(new License().name("Apache 2.0").url("http://springdoc.org")));
 	}
 
