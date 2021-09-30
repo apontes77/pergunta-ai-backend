@@ -21,29 +21,6 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class PerguntaaiBackendApplicationTests {
 
-	@Mock
-	private UserRepository userRepository;
-	@InjectMocks
-	private UserController userController;
-	@Test
-	void mustResgisterUser() {
-		final UserForm registerUserForm = UserForm.builder()
-				.name("Aluno Teste")
-				.email("alunoteste@puc.com.br")
-				.course("ADS")
-				.password("123456")
-				.build();
 
-		User registerUser = registerUserForm.convert();
-
-		when(userRepository.save(ArgumentMatchers.any(User.class))).thenReturn(registerUser);
-
-
-		UriComponentsBuilder uriComponents = UriComponentsBuilder.fromUriString("localhost:8081/api/v1/user/register/{id}");
-
-		ResponseEntity<UserDto> userCreated = userController.register(registerUserForm, uriComponents);
-		assertThat(userCreated.getBody().getName()).isSameAs(registerUserForm.getName());
-		assertNotNull(userCreated);
-	}
 
 }

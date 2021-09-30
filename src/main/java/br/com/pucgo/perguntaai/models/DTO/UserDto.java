@@ -4,6 +4,8 @@ package br.com.pucgo.perguntaai.models.DTO;
 import br.com.pucgo.perguntaai.models.User;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class UserDto {
     private Long id;
@@ -11,6 +13,7 @@ public class UserDto {
     private String email;
     private String password;
     private String course;
+    private LocalDateTime creationDate;
 
 
     public UserDto(User user) {
@@ -19,5 +22,6 @@ public class UserDto {
         this.email = user.getEmail();
         this.password = user.getPassword();
         this.course = user.getCourse();
+        this.creationDate = user.getCreationDate();
     }
 }

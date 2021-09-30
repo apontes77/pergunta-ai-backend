@@ -43,9 +43,9 @@ public class User implements UserDetails {
     @Column(name = "role_user")
     @Enumerated(EnumType.STRING)
     private RoleUser roleUser;
-
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Profile> profiles = new ArrayList<>();
+    private LocalDateTime creationDate = LocalDateTime.now();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

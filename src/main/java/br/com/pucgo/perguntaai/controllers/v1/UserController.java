@@ -3,6 +3,7 @@ package br.com.pucgo.perguntaai.controllers.v1;
 import br.com.pucgo.perguntaai.config.security.TokenService;
 import br.com.pucgo.perguntaai.models.DTO.TokenDto;
 import br.com.pucgo.perguntaai.models.DTO.UserDto;
+import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.LoginForm;
 import br.com.pucgo.perguntaai.models.form.UserForm;
@@ -23,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -34,13 +36,16 @@ public class UserController {
     @PostMapping
     @Transactional
     @CacheEvict(value = "user", allEntries = true)
-    public ResponseEntity<UserDto> register(@RequestBody @Valid UserForm userForm,
+    public ResponseEntity<?> register(@RequestBody @Valid UserForm userForm,
                                             UriComponentsBuilder uriBuilder) {
-        User user = userForm.convert();
-        userRepository.save(user);
-
-        URI uri = uriBuilder.path("/register/{id}").buildAndExpand(user.getId()).toUri();
-        return ResponseEntity.created(uri).body(new UserDto(user));
+        Optional<User> userOptional = userRepository.findByEmail(userForm.getEmail());
+        if (!userOptional.isPresent()) {
+            User user = userForm.convert();
+            userRepository.save(user);
+            URI uri = uriBuilder.path("/{id}").buildAndExpand(user.getId()).toUri();
+            return ResponseEntity.created(uri).body(new UserDto(user));
+        }
+        return ResponseEntity.status(418).body("Já existe um usuário cadastrado com esse e-mail.");
     }
 }
 
