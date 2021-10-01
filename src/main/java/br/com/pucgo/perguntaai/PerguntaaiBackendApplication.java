@@ -19,8 +19,9 @@ public class PerguntaaiBackendApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/api/**")
-						.allowedOrigins("https://pergunta-ai.azurewebsites.net/")
-						.allowedMethods("PUT", "DELETE", "GET", "POST");
+						//this is for test!!! Will be fixed very soon
+						.allowedOrigins("*")
+						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
 			}
 		};
 	}
