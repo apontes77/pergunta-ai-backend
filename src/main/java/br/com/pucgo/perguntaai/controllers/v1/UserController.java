@@ -1,17 +1,24 @@
 package br.com.pucgo.perguntaai.controllers.v1;
 
+import br.com.pucgo.perguntaai.models.DTO.TokenDto;
+import br.com.pucgo.perguntaai.models.DTO.TopicDto;
+import br.com.pucgo.perguntaai.models.DTO.TopicFormUpdate;
 import br.com.pucgo.perguntaai.models.DTO.UserDto;
+import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.models.User;
+import br.com.pucgo.perguntaai.models.form.LoginForm;
 import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.repositories.UserRepository;
 import br.com.pucgo.perguntaai.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
@@ -47,6 +54,22 @@ public class UserController {
             return ResponseEntity.created(uri).body(new UserDto(userInserted));
         }
         return ResponseEntity.status(418).body("Já existe um usuário cadastrado com esse e-mail.");
+    }
+
+    @PutMapping("/redefinePassword")
+    @Transactional
+    public ResponseEntity<UserDto> redefinePassword(@RequestBody @Valid LoginForm loginForm,
+                                                    UriComponentsBuilder uriBuilder) {
+        Optional<User> userFound = userRepository.findByEmail(loginForm.getEmail());
+        if (userFound.isPresent()) {
+            User userRedifine = userService.findUserByEmail(loginForm.getEmail());
+            userRedifine.setPassword(loginForm.getPassword());
+            userRedifine = userService.saveUser(userRedifine);
+
+            URI uri = uriBuilder.path("/{id}").buildAndExpand(userRedifine.getId()).toUri();
+            return ResponseEntity.created(uri).body(new UserDto(userRedifine));
+        }
+        return ResponseEntity.notFound().build();
     }
 }
 
