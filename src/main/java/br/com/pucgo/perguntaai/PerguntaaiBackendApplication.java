@@ -18,8 +18,9 @@ public class PerguntaaiBackendApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/api")
-						.allowedOrigins("https://pergunta-ai.azurewebsites.net/");
+				registry.addMapping("/api/**")
+						.allowedOrigins("https://pergunta-ai.azurewebsites.net/")
+						.allowedMethods("PUT", "DELETE", "GET", "POST");
 			}
 		};
 	}
