@@ -82,6 +82,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .and().addFilterBefore(new AuthenticationTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
 
         http.headers().frameOptions().disable();
+        http.cors();
     }
 
     /**
