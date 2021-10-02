@@ -1,5 +1,6 @@
 package br.com.pucgo.perguntaai.controllers.v1;
 
+import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
 import br.com.pucgo.perguntaai.models.DTO.TokenDto;
 import br.com.pucgo.perguntaai.models.DTO.TopicDto;
 import br.com.pucgo.perguntaai.models.DTO.TopicFormUpdate;
@@ -45,7 +46,7 @@ public class UserController {
         {
             return ResponseEntity.status(400).body("E-mail inválido! O email deve ser do domininio: @pucgo.edu.br");
         }
-        Optional<User> userFound = userRepository.findByEmail(userForm.getEmail());
+        Optional<User> userFound = userService.findByEmail(userForm.getEmail());
         if (!userFound.isPresent()) {
             User user = userForm.convert();
             final User userInserted = userService.saveUser(user);
@@ -58,18 +59,18 @@ public class UserController {
 
     @PutMapping("/redefinePassword")
     @Transactional
-    public ResponseEntity<UserDto> redefinePassword(@RequestBody @Valid LoginForm loginForm,
+    public ResponseEntity<?> redefinePassword(@RequestBody @Valid LoginForm loginForm,
                                                     UriComponentsBuilder uriBuilder) {
-        Optional<User> userFound = userRepository.findByEmail(loginForm.getEmail());
-        if (userFound.isPresent()) {
-            User userRedifine = userService.findUserByEmail(loginForm.getEmail());
-            userRedifine.setPassword(loginForm.getPassword());
-            userRedifine = userService.saveUser(userRedifine);
 
-            URI uri = uriBuilder.path("/{id}").buildAndExpand(userRedifine.getId()).toUri();
-            return ResponseEntity.created(uri).body(new UserDto(userRedifine));
+        Optional<User> userFound = userService.findByEmail(loginForm.getEmail());
+
+        if (userFound.isPresent()) {
+            User userRedefine = userService.updatePasswordUser(userFound.get(), loginForm.getPassword());
+
+            URI uri = uriBuilder.path("/{id}").buildAndExpand(userRedefine.getId()).toUri();
+            return ResponseEntity.created(uri).body(new UserDto(userRedefine));
         }
-        return ResponseEntity.notFound().build();
+          return ResponseEntity.notFound().build();
     }
 }
 
