@@ -25,7 +25,7 @@ public class RegisterUserTests {
     private UserController userController;
 
     @Test
-    void mustRegisterUser() {
+    void givenAnUserToRegister_whenMakesARegister_thenTheRegisterIsMadeWithSuccess() {
         final UserForm registerUserForm = UserForm.builder()
                 .name("Aluno Teste")
                 .email("alunoteste@puc.com.br")
@@ -41,7 +41,8 @@ public class RegisterUserTests {
          * Para que este mock da resposta do userService funcione,
          * ele deve corresponder exatamente aos argumentos do método saveUser.
          */
-        when(userService.saveUser(ArgumentMatchers.any(User.class))).thenReturn(registerUser);
+        when(userService.saveUser(ArgumentMatchers.any(User.class)))
+                .thenReturn(registerUser);
 
         UriComponentsBuilder uriComponents = UriComponentsBuilder.fromUriString("localhost:8081/api/v1/user/register/{id}");
 

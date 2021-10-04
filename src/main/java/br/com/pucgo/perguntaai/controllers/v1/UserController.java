@@ -1,24 +1,13 @@
 package br.com.pucgo.perguntaai.controllers.v1;
 
-import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
-import br.com.pucgo.perguntaai.models.DTO.TokenDto;
-import br.com.pucgo.perguntaai.models.DTO.TopicDto;
-import br.com.pucgo.perguntaai.models.DTO.TopicFormUpdate;
 import br.com.pucgo.perguntaai.models.DTO.UserDto;
-import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.LoginForm;
 import br.com.pucgo.perguntaai.models.form.UserForm;
-import br.com.pucgo.perguntaai.repositories.UserRepository;
 import br.com.pucgo.perguntaai.services.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,8 +22,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
+
 
     @PostMapping
     @Transactional

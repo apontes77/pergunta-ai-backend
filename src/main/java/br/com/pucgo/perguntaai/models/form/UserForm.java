@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Builder
 public class UserForm {
+
     @NotNull
     @NotEmpty
     @Length(min = 6)
