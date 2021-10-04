@@ -8,6 +8,7 @@ import br.com.pucgo.perguntaai.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,21 +23,28 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
+    public UserController(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @PostMapping
+    @PostMapping("/registration")
     @Transactional
     @CacheEvict(value = "user", allEntries = true)
     public ResponseEntity<?> register(@RequestBody @Valid UserForm userForm,
                                       UriComponentsBuilder uriBuilder) {
 
-        if(!userForm.getEmail().contains("@pucgo.edu.br"))
-        {
-            return ResponseEntity.status(400).body("E-mail inválido! O email deve ser do domininio: @pucgo.edu.br");
-        }
         Optional<User> userFound = userService.findByEmail(userForm.getEmail());
         if (!userFound.isPresent()) {
-            User user = userForm.convert();
+
+            User user = User.builder()
+                    .name(userFound.get().getName())
+                    .password(passwordEncoder.encode(userFound.get().getPassword()))
+                    .course(userFound.get().getCourse())
+                    .email(userFound.get().getPassword())
+                    .build();
+
             final User userInserted = userService.saveUser(user);
 
             URI uri = uriBuilder.path("/{id}").buildAndExpand(userInserted.getId()).toUri();
@@ -45,7 +53,7 @@ public class UserController {
         return ResponseEntity.status(418).body("Já existe um usuário cadastrado com esse e-mail.");
     }
 
-    @PutMapping("/redefinePassword")
+    @PutMapping("/redefine-password")
     @Transactional
     public ResponseEntity<?> redefinePassword(@RequestBody @Valid LoginForm loginForm,
                                                     UriComponentsBuilder uriBuilder) {

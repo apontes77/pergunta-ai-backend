@@ -1,6 +1,5 @@
 package br.com.pucgo.perguntaai.services;
 
-import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
