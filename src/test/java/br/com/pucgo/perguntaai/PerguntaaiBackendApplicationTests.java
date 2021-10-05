@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class PerguntaaiBackendApplicationTests {
 
-
+    @Test
+void setup(){}
 
 }
