@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -54,6 +55,12 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
     /**
      * Configura a parte de autenticação
      * @param auth
@@ -75,8 +82,12 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/v1/topics").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/topics/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/topics").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/v1/topics/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/user/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/v1/user/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/user/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/v1/user/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
@@ -91,16 +102,6 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
     }
 
-    /**
-     * Configurações de recursos estáticos (JS, CSS, Imagens etc)
-     * @param web
-     * @throws Exception
-     */
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-
-    }
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -110,4 +111,5 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }
