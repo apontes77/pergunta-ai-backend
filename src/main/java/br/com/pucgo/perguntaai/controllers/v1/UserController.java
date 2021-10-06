@@ -7,11 +7,9 @@ import br.com.pucgo.perguntaai.repositories.UserRepository;
 import br.com.pucgo.perguntaai.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
@@ -47,6 +45,15 @@ public class UserController {
             return ResponseEntity.created(uri).body(new UserDto(userInserted));
         }
         return ResponseEntity.status(418).body("Já existe um usuário cadastrado com esse e-mail.");
+    }
+
+    @DeleteMapping
+    @Transactional
+    @CacheEvict(value = "user", allEntries = true)
+    public ResponseEntity<?> delete(@RequestBody User user) {
+        userService.deleteUser(user);
+
+        return ResponseEntity.ok().build();
     }
 }
 
