@@ -21,6 +21,7 @@ public class AuthenticationService implements UserDetailsService {
         final Optional<User> user = userRepository.findByEmail(emailAuthentication);
         if (user.isPresent()) {
             return User.builder()
+                    .id(user.get().getId())
                     .name(user.get().getName())
                     .email(user.get().getEmail())
                     .password(user.get().getPassword())
