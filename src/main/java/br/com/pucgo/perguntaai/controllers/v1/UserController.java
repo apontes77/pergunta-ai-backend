@@ -1,8 +1,10 @@
 package br.com.pucgo.perguntaai.controllers.v1;
 
+import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
 import br.com.pucgo.perguntaai.models.DTO.UserDto;
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.UserForm;
+import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 import br.com.pucgo.perguntaai.services.UserService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +30,13 @@ public class UserController {
     }
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> find(@PathVariable Long id) {
-        User obj = userService.findById(id);
-        return ResponseEntity.ok().body(obj);
+    public ResponseEntity<?> find(@PathVariable Long id) {
+        try{
+            User obj = userService.findById(id);
+            return ResponseEntity.ok().body(obj);
+        }catch (NotFoundUserException e){
+            return ResponseEntity.status(400).body("Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName());
+        }
     }
 
     @PostMapping("/registration")
@@ -58,12 +64,24 @@ public class UserController {
         return ResponseEntity.badRequest().body("Não foi possível realizar seu cadastro pois o email inserido já existe em nossa base!");
     }
 
-    @RequestMapping(value="/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<Void> update(@Valid @RequestBody UserDto objDTO, @PathVariable Long id){
-        User obj = userService.fromDTO(objDTO);
-        obj.setId(id);
-        obj = userService.update(obj);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{id}")
+    @Transactional
+    @CacheEvict(value = "user", allEntries = true)
+    public ResponseEntity<?> update(@RequestBody UserRedefineForm userRedefineForm, @PathVariable Long id){
+        try{
+            User obj = userService.fromUserRedefineForm(userRedefineForm);
+            obj.setId(id);
+            obj = userService.update(obj);
+
+            URI uri = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(obj)
+                    .toUri();
+            return ResponseEntity.created(uri).body(new UserRedefineForm(obj));
+        }catch (NotFoundUserException e){
+            return ResponseEntity.status(400).body("Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName());
+        }
     }
 
 }

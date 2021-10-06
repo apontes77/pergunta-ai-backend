@@ -3,6 +3,8 @@ package br.com.pucgo.perguntaai.services;
 import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
 import br.com.pucgo.perguntaai.models.DTO.UserDto;
 import br.com.pucgo.perguntaai.models.User;
+import br.com.pucgo.perguntaai.models.form.UserForm;
+import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 import br.com.pucgo.perguntaai.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -45,7 +47,7 @@ public class UserService {
 
     public User update(User obj) {
         User newObj = findById(obj.getId());
-        updateUserData(newObj, obj);
+        newObj = updateUserData(newObj, obj);
         return userRepository.save(newObj);
     }
 
@@ -59,18 +61,24 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private void updateUserData(User existentUser, User userToBeUpdated) {
-        userToBeUpdated.setName(existentUser.getName());
-        userToBeUpdated.setRoleUser(existentUser.getRoleUser());
-        userToBeUpdated.setCourse(existentUser.getCourse());
-        userToBeUpdated.setPassword(passwordEncoder.encode(existentUser.getPassword()));
-        userToBeUpdated.setAvatarOptions(existentUser.getAvatarOptions());
-        userToBeUpdated.setBirthDate(existentUser.getBirthDate());
-
-        LOGGER.info("USER INSERTED: NAME: {}, COURSE: {}", userToBeUpdated.getName(), userToBeUpdated.getCourse());
+    private User updateUserData(User existentUser, User userToBeUpdated) {
+        existentUser.setName(userToBeUpdated.getName());
+        existentUser.setRoleUser(userToBeUpdated.getRoleUser());
+        existentUser.setCourse(userToBeUpdated.getCourse());
+        existentUser.setPassword(passwordEncoder.encode(userToBeUpdated.getPassword()));
+        existentUser.setAvatarOptions(userToBeUpdated.getAvatarOptions());
+        existentUser.setBirthDate(userToBeUpdated.getBirthDate());
+        return existentUser;
     }
 
-    public User fromDTO(@Valid UserDto objDTO) {
-        return new User(objDTO.getName(), objDTO.getEmail(), objDTO.getPassword(), objDTO.getCourse());
+    public User fromUserRedefineForm(@Valid UserRedefineForm userRedefineForm) {
+        return new User(
+                userRedefineForm.getName(),
+                userRedefineForm.getPassword(),
+                userRedefineForm.getCourse(),
+                userRedefineForm.getRoleUser(),
+                userRedefineForm.getAvatarOptions(),
+                userRedefineForm.getBirthDate()
+        );
     }
 }
