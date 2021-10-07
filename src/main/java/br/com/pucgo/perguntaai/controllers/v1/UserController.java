@@ -7,10 +7,14 @@ import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 import br.com.pucgo.perguntaai.services.UserService;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -64,6 +68,16 @@ public class UserController {
         return ResponseEntity.badRequest().body("Não foi possível realizar seu cadastro pois o email inserido já existe em nossa base!");
     }
 
+
+    @DeleteMapping
+    @Transactional
+    @CacheEvict(value = "user", allEntries = true)
+    public ResponseEntity<?> delete(@RequestBody User user) {
+        userService.deleteUser(user);
+
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/{id}")
     @Transactional
     @CacheEvict(value = "user", allEntries = true)
@@ -83,7 +97,4 @@ public class UserController {
             return ResponseEntity.status(400).body("Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName());
         }
     }
-
 }
-
-

@@ -1,15 +1,24 @@
 package br.com.pucgo.perguntaai.services;
 
 import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
+
+import br.com.pucgo.perguntaai.models.Topic;
+import br.com.pucgo.perguntaai.repositories.TopicRepository;
+
 import br.com.pucgo.perguntaai.models.DTO.UserDto;
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
+
 import br.com.pucgo.perguntaai.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +34,8 @@ public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TopicRepository topicRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -55,6 +66,19 @@ public class UserService {
         Optional<User> obj = userRepository.findById(id);
         return obj.orElseThrow(() -> new NotFoundUserException(
                 "Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName()));
+    }
+
+    public void deleteUser(User user) {
+        final Page<Topic> topicPage;
+
+        topicPage = topicRepository.findByAuthor(user, null);
+
+        topicPage.forEach(topic -> {
+            topic.setAuthor(null);
+            topicRepository.save(topic);
+        });
+
+        userRepository.delete(user);
     }
 
     public User saveUser(User user) {
