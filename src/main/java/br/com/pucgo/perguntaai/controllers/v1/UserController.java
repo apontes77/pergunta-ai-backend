@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -31,6 +32,11 @@ public class UserController {
     public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.status(200).body(userService.findAll());
     }
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
