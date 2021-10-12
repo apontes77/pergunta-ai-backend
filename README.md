@@ -11,4 +11,4 @@ Para abrir Pull-Request, crie uma branch a partir da main com a descrição do s
 Aplicação desenvolvida para a disciplina "Projeto Integrador", do último semestre 
 do curso de Análise e Desenvolvimento de Sistemas na PUC-Goiás.
 
-A aplicação está disponível em: https://pergunta-ai.azurewebsites.net/, com banco de dados SQL Server, hospedado na própria Azure.
+A aplicação está disponível em: http://perguntaai-env.eba-dfemfgsm.us-east-1.elasticbeanstalk.com/, com banco de dados MySQL.
