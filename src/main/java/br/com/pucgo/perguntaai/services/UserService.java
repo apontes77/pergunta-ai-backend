@@ -51,6 +51,12 @@ public class UserService {
         return userRepository.save(newObj);
     }
 
+    public User updatePassword(User obj) {
+        User newObj = findById(obj.getId());
+        newObj = updateUserPassword(newObj, obj.getPassword());
+        return userRepository.save(newObj);
+    }
+
     public User findById(Long id) {
         Optional<User> obj = userRepository.findById(id);
         return obj.orElseThrow(() -> new NotFoundUserException(
@@ -68,6 +74,11 @@ public class UserService {
         existentUser.setPassword(passwordEncoder.encode(userToBeUpdated.getPassword()));
         existentUser.setAvatarOptions(userToBeUpdated.getAvatarOptions());
         existentUser.setBirthDate(userToBeUpdated.getBirthDate());
+        return existentUser;
+    }
+
+    private User updateUserPassword(User existentUser, String passwordToBeUpdated) {
+        existentUser.setPassword(passwordEncoder.encode(passwordToBeUpdated));
         return existentUser;
     }
 

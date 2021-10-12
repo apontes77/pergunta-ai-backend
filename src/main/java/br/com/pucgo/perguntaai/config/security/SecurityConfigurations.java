@@ -86,6 +86,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/v1/user/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/v1/user/password/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/user/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/v1/user/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
