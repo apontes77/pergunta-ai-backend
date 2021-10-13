@@ -79,6 +79,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+
+                .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/topics").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/topics/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/topics").permitAll()
@@ -93,6 +95,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/v1/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and().cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -105,10 +108,11 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://pergunta-ai.azurewebsites.net/"));
+        configuration.setAllowedOrigins(Arrays.asList("http://perguntaai-env.eba-dfemfgsm.us-east-1.elasticbeanstalk.com/"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }
