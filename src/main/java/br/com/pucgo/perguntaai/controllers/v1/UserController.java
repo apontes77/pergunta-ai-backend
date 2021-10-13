@@ -3,6 +3,7 @@ package br.com.pucgo.perguntaai.controllers.v1;
 import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
 import br.com.pucgo.perguntaai.models.DTO.UserDto;
 import br.com.pucgo.perguntaai.models.User;
+import br.com.pucgo.perguntaai.models.form.RedefinePasswordForm;
 import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 import br.com.pucgo.perguntaai.services.UserService;
@@ -103,4 +104,27 @@ public class UserController {
             return ResponseEntity.status(400).body("Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName());
         }
     }
+    @PutMapping("/password/{id}")
+    @Transactional
+    @CacheEvict(value = "user", allEntries = true)
+    public ResponseEntity<?> updatePassword(@RequestBody RedefinePasswordForm redefinePasswordForm, @PathVariable Long id){
+        try{
+            User obj = User.builder()
+                    .id(id)
+                    .password(redefinePasswordForm.getPassword())
+                    .build();
+            obj = userService.updatePassword(obj);
+
+            URI uri = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/password/{id}")
+                    .buildAndExpand(obj)
+                    .toUri();
+            return ResponseEntity.created(uri).body(new UserRedefineForm(obj));
+        }catch (NotFoundUserException e){
+            return ResponseEntity.status(400).body("Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName());
+        }
+    }
+
 }
+
