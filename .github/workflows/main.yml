@@ -86,7 +86,7 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           use_existing_version_if_available: false
           application_name: pergunta-ai
-          environment_name: Perguntaai-env
+          environment_name: Perguntaai-env-1
           version_label: ${{github.SHA}}
           region: us-east-1
           deployment_package: perguntaai-0.0.1-SNAPSHOT.jar
