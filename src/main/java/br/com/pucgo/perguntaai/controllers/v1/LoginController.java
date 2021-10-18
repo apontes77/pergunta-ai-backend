@@ -2,6 +2,7 @@ package br.com.pucgo.perguntaai.controllers.v1;
 
 import br.com.pucgo.perguntaai.config.security.TokenService;
 import br.com.pucgo.perguntaai.models.DTO.TokenDto;
+import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.LoginForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +39,9 @@ public class LoginController {
         try {
             final Authentication authentication = authManager.authenticate(loginData);
             final String token = tokenService.generateToken(authentication);
-
-            return ResponseEntity.ok(new TokenDto(token, "Bearer"));
+            User user = (User) authentication.getPrincipal();
+            Long id = user.getId();
+            return ResponseEntity.ok(new TokenDto(id, token, "Bearer"));
         } catch (AuthenticationException e) {
             return ResponseEntity.badRequest().build();
         }

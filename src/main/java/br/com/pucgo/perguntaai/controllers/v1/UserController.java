@@ -59,7 +59,7 @@ public class UserController {
             return ResponseEntity.status(400).body("E-mail inválido! O email deve ser do domínio: @pucgo.edu.br");
         }
 
-        if(userService.findUserByEmail(userForm.getEmail())) {
+        if(!userService.findUserByEmail(userForm.getEmail())) {
             User user = userForm.convert();
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             final User userInserted = userService.saveUser(user);
