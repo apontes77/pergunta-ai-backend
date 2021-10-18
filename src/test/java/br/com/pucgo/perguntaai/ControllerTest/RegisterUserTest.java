@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
-public class RestisterUserTest {
+public class RegisterUserTest {
     @Autowired
     private UserController userController;
 

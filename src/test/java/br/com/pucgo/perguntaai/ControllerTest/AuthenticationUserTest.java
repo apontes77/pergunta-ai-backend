@@ -1,9 +1,7 @@
 package br.com.pucgo.perguntaai.ControllerTest;
 
-import br.com.pucgo.perguntaai.controllers.v1.AuthenticationController;
-import br.com.pucgo.perguntaai.controllers.v1.UserController;
+import br.com.pucgo.perguntaai.controllers.v1.LoginController;
 import br.com.pucgo.perguntaai.models.form.LoginForm;
-import br.com.pucgo.perguntaai.models.form.UserForm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 @SpringBootTest
 public class AuthenticationUserTest {
     @Autowired
-    private AuthenticationController authenticationController;
+    private LoginController loginController;
 
     @Test
     void mustAuthenticateUser () {
@@ -22,7 +20,7 @@ public class AuthenticationUserTest {
                 .password("123456")
                 .build();
 
-        ResponseEntity<?> userCreated = authenticationController.authenticate(loginUser);
+        ResponseEntity<?> userCreated = loginController.authenticate(loginUser);
         Assertions.assertEquals(userCreated.getStatusCodeValue(), 200);
     }
 
@@ -34,7 +32,7 @@ public class AuthenticationUserTest {
                 .password("123")
                 .build();
 
-        ResponseEntity<?> userCreated = authenticationController.authenticate(loginUser);
+        ResponseEntity<?> userCreated = loginController.authenticate(loginUser);
         Assertions.assertEquals(userCreated.getStatusCodeValue(), 400);
     }
 }
