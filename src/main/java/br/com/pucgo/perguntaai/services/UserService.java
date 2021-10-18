@@ -46,7 +46,7 @@ public class UserService {
 
     public boolean findUserByEmail(String email) {
         final Optional<User> userOptional = userRepository.findByEmail(email);
-        if(!userOptional.isPresent()){
+        if(userOptional.isPresent()){
             return true;
         }
         return false;
