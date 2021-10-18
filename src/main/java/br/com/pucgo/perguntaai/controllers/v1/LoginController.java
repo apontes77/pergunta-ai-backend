@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-public class AuthenticationController {
+public class LoginController {
 
     @Autowired
     private AuthenticationManager authManager;
@@ -26,6 +26,11 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
+    /**
+     * é submetido email e senha do usuário a fim de gerar autenticação
+     * @param form, do tipo LoginForm
+     * @return token e identificador do usuário
+     */
     @PostMapping
     public ResponseEntity<?> authenticate(@RequestBody @Valid LoginForm form) {
         UsernamePasswordAuthenticationToken loginData = form.convert();
@@ -38,6 +43,9 @@ public class AuthenticationController {
         } catch (AuthenticationException e) {
             return ResponseEntity.badRequest().build();
         }
-
     }
+
+    /**
+     * aqui poderia criar o controller para "esqueci minha senha", por exemplo.
+     */
 }

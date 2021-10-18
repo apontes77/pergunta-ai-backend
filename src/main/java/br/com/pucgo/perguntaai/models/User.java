@@ -27,22 +27,30 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
     @Column(name = "name")
     private String name;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "password")
     private String password;
+
     @Column(name = "course")
     private String course;
+
     @Column(name = "birth_date")
     private LocalDateTime birthDate;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "avatar_options")
     private AvatarOptions avatarOptions;
+
     @Column(name = "role_user")
     @Enumerated(EnumType.STRING)
     private RoleUser roleUser;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Profile> profiles = new ArrayList<>();
     private LocalDateTime creationDate = LocalDateTime.now();
