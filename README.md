@@ -11,4 +11,4 @@ Para abrir Pull-Request, crie uma branch a partir da main com a descrição do s
 Aplicação desenvolvida para a disciplina "Projeto Integrador", do último semestre 
 do curso de Análise e Desenvolvimento de Sistemas na PUC-Goiás.
 
-A aplicação está disponível em: http://perguntaai-env.eba-dfemfgsm.us-east-1.elasticbeanstalk.com/, com banco de dados MySQL.
+A aplicação está disponível em: http://perguntaai-env-1.eba-dfemfgsm.us-east-1.elasticbeanstalk.com/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config, com banco de dados MySQL.
