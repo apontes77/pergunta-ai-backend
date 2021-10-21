@@ -35,7 +35,6 @@ public class LoginController {
     @PostMapping
     public ResponseEntity<?> authenticate(@RequestBody @Valid LoginForm form) {
         UsernamePasswordAuthenticationToken loginData = form.convert();
-
         try {
             final Authentication authentication = authManager.authenticate(loginData);
             final String token = tokenService.generateToken(authentication);
@@ -43,6 +42,10 @@ public class LoginController {
             Long id = user.getId();
             return ResponseEntity.ok(new TokenDto(id, token, "Bearer"));
         } catch (AuthenticationException e) {
+            if(e.getMessage() == "Bad credentials")
+            {
+                return ResponseEntity.status(406).body("E-mail ou senha incorretos.");
+            }
             return ResponseEntity.badRequest().build();
         }
     }
