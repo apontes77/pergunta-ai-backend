@@ -28,7 +28,7 @@ public class RegisterUserTest {
     }
 
     @Test
-    void mustResgisterUser () {
+    void mustRegisterUser () {
 
         UserForm registerUser = UserForm.builder()
                 .name("Aluno Teste")
@@ -42,7 +42,7 @@ public class RegisterUserTest {
     }
 
     @Test
-    void mustNotResgisterUser () {
+    void mustNotRegisterUser () {
         //usuário já existe no banco de testes
         UserForm registerUser = UserForm.builder()
                 .name("Aluno Teste")
