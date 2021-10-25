@@ -14,6 +14,20 @@ public class RegisterUserTest {
     private UserController userController;
 
     @Test
+    void mustNotRegisterUserEmail () {
+        //Email com dominio invalido
+        UserForm registerUser = UserForm.builder()
+                .name("Aluno Teste")
+                .email("aluno@pucgo.edu.com.br")
+                .course("análise e desenvolvimento de sistemas")
+                .password("123456")
+                .build();
+
+        ResponseEntity<?> userCreated = userController.register(registerUser);
+        Assertions.assertEquals(userCreated.getStatusCodeValue(), 400);
+    }
+
+    @Test
     void mustResgisterUser () {
 
         UserForm registerUser = UserForm.builder()
@@ -33,20 +47,6 @@ public class RegisterUserTest {
         UserForm registerUser = UserForm.builder()
                 .name("Aluno Teste")
                 .email("aluno@pucgo.edu.br")
-                .course("análise e desenvolvimento de sistemas")
-                .password("123456")
-                .build();
-
-        ResponseEntity<?> userCreated = userController.register(registerUser);
-        Assertions.assertEquals(userCreated.getStatusCodeValue(), 400);
-    }
-
-    @Test
-    void mustNotResgisterUserEmail () {
-        //Email com dominio invalido
-        UserForm registerUser = UserForm.builder()
-                .name("Aluno Teste")
-                .email("aluno@pucgo.edu.com.br")
                 .course("análise e desenvolvimento de sistemas")
                 .password("123456")
                 .build();
