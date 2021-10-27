@@ -14,7 +14,21 @@ public class RegisterUserTest {
     private UserController userController;
 
     @Test
-    void mustResgisterUser () {
+    void mustNotRegisterUserEmail () {
+        //Email com dominio invalido
+        UserForm registerUser = UserForm.builder()
+                .name("Aluno Teste")
+                .email("aluno@pucgo.edu.com.br")
+                .course("análise e desenvolvimento de sistemas")
+                .password("123456")
+                .build();
+
+        ResponseEntity<?> userCreated = userController.register(registerUser);
+        Assertions.assertEquals(userCreated.getStatusCodeValue(), 400);
+    }
+
+    @Test
+    void mustRegisterUser () {
 
         UserForm registerUser = UserForm.builder()
                 .name("Aluno Teste")
@@ -28,7 +42,7 @@ public class RegisterUserTest {
     }
 
     @Test
-    void mustNotResgisterUser () {
+    void mustNotRegisterUser () {
         //usuário já existe no banco de testes
         UserForm registerUser = UserForm.builder()
                 .name("Aluno Teste")
