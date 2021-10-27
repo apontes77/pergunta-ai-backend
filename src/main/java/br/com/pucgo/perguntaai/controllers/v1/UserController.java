@@ -40,6 +40,10 @@ public class UserController {
     public ResponseEntity<List<User>> getUsers() {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Access-Control-Allow-Origin", "*");
+        responseHeaders.set("Access-Control-Allow-Methods", "POST, GET");
+        responseHeaders.set("Access-Control-Allow-Headers", "*");
+        responseHeaders.set("Access-Control-Max-Age", "86400");
+
 
         return ResponseEntity.status(200).headers(responseHeaders).body(userService.findAll());
     }
@@ -49,6 +53,10 @@ public class UserController {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Access-Control-Allow-Origin", "*");
+        responseHeaders.set("Access-Control-Allow-Methods", "POST, GET");
+        responseHeaders.set("Access-Control-Allow-Headers", "*");
+        responseHeaders.set("Access-Control-Max-Age", "86400");
+
         try{
             User obj = userService.findById(id);
             return ResponseEntity.ok().headers(responseHeaders).body(obj);
