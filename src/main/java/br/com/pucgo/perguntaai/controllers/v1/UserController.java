@@ -24,6 +24,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/v1/user")
 public class UserController {
 
@@ -38,28 +39,14 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>> getUsers() {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Access-Control-Allow-Origin", "*");
-        responseHeaders.set("Access-Control-Allow-Methods", "POST, GET");
-        responseHeaders.set("Access-Control-Allow-Headers", "*");
-        responseHeaders.set("Access-Control-Max-Age", "86400");
-
-
-        return ResponseEntity.status(200).headers(responseHeaders).body(userService.findAll());
+        return ResponseEntity.status(200).body(userService.findAll());
     }
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> find(@PathVariable Long id) {
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Access-Control-Allow-Origin", "*");
-        responseHeaders.set("Access-Control-Allow-Methods", "POST, GET");
-        responseHeaders.set("Access-Control-Allow-Headers", "*");
-        responseHeaders.set("Access-Control-Max-Age", "86400");
-
         try{
             User obj = userService.findById(id);
-            return ResponseEntity.ok().headers(responseHeaders).body(obj);
+            return ResponseEntity.ok().body(obj);
         }catch (NotFoundUserException e){
             return ResponseEntity.status(400).body("Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName());
         }
