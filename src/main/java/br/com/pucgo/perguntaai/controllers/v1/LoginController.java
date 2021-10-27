@@ -43,7 +43,7 @@ public class LoginController {
             return ResponseEntity.ok(new TokenDto(id, token, "Bearer"));
         } catch (AuthenticationException e) {
             if(e.getMessage() == "Bad credentials") {
-                return ResponseEntity.status(406).body("E-mail ou senha incorretos.");
+                return ResponseEntity.status(400).body("E-mail ou senha incorretos.");
             }
             return ResponseEntity.badRequest().build();
         }
