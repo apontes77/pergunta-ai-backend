@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
@@ -110,6 +111,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("*"));
+        configuration.setMaxAge(Duration.ofMillis(86400));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type, X-Auth-Token"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
