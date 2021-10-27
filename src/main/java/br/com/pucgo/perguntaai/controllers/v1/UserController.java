@@ -9,6 +9,7 @@ import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 import br.com.pucgo.perguntaai.services.UserService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.util.UriComponentsBuilder;
@@ -37,14 +38,20 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.status(200).body(userService.findAll());
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Access-Control-Allow-Origin", "*");
+
+        return ResponseEntity.status(200).headers(responseHeaders).body(userService.findAll());
     }
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> find(@PathVariable Long id) {
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Access-Control-Allow-Origin", "*");
         try{
             User obj = userService.findById(id);
-            return ResponseEntity.ok().body(obj);
+            return ResponseEntity.ok().headers(responseHeaders).body(obj);
         }catch (NotFoundUserException e){
             return ResponseEntity.status(400).body("Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName());
         }
