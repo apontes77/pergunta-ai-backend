@@ -6,25 +6,32 @@ import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.RedefinePasswordForm;
 import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
+import br.com.pucgo.perguntaai.services.PasswordResetService;
 import br.com.pucgo.perguntaai.services.UserService;
+import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
+    @Autowired
+    private JavaMailSender mailSender;
 
     private final UserService userService;
 
@@ -126,5 +133,23 @@ public class UserController {
         }
     }
 
+    @PutMapping("/send-reset-token")
+    public ResponseEntity<?> resetPassword(HttpServletRequest request, @RequestParam("email") String userEmail) {
+        try{
+            User user = userService.getUserByEmail(userEmail);
+            String token = UUID.randomUUID().toString();
+            PasswordResetService passwordService = new PasswordResetService();
+            mailSender.send(passwordService.constructResetTokenEmail(request.toString(),
+                    request.getLocale(), token, user));
+            return ResponseEntity.status(200).body("E-mail enviado para: " + userEmail);
+
+        }catch(NotFoundUserException e){
+            return ResponseEntity.status(400).body("Usuário não encontrado! E-mail: " + userEmail + ", Tipo: " + User.class.getName());
+        }
+        catch (MailException em)
+        {
+            return ResponseEntity.status(400).body(em);
+        }
+    }
 }
 
