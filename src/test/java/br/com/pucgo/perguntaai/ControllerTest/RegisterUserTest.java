@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
@@ -14,7 +15,7 @@ public class RegisterUserTest {
     private UserController userController;
 
     @Test
-    void mustNotRegisterUserEmail () {
+    void mustNotRegisterUserEmail () throws Exception {
         //Email com dominio invalido
         UserForm registerUser = UserForm.builder()
                 .name("Aluno Teste")
@@ -22,8 +23,9 @@ public class RegisterUserTest {
                 .course("análise e desenvolvimento de sistemas")
                 .password("123456")
                 .build();
-
+                
         ResponseEntity<?> userCreated = userController.register(registerUser);
+
         Assertions.assertEquals(userCreated.getStatusCodeValue(), 400);
     }
 
@@ -32,13 +34,13 @@ public class RegisterUserTest {
 
         UserForm registerUser = UserForm.builder()
                 .name("Aluno Teste")
-                .email("alunoteste@pucgo.edu.br")
+                .email("2011018272671@pucgo.edu.br")
                 .course("análise e desenvolvimento de sistemas")
                 .password("123456")
                 .build();
 
         ResponseEntity<?> userCreated = userController.register(registerUser);
-        Assertions.assertEquals(userCreated.getStatusCodeValue(), 201);
+        Assertions.assertEquals(userCreated.getStatusCode(), HttpStatus.CREATED);
     }
 
     @Test
