@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 
 @Getter
 public class UserDto {
-    private Long id;
-    private String name;
-    private String email;
-    private String password;
-    private String course;
-    private LocalDateTime creationDate;
+    private final Long id;
+    private final String name;
+    private final String email;
+    private final String password;
+    private final String course;
+    private final LocalDateTime creationDate;
 
 
     public UserDto(User user) {

@@ -15,6 +15,8 @@
 	<description>software para projeto integrador</description>
 	<properties>
 		<java.version>11</java.version>
+		<groovy.version>3.0.7</groovy.version>
+		<rest-assured.version>4.3.3</rest-assured.version>
 	</properties>
 
 	<dependencies>
@@ -32,13 +34,6 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.20</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>4.4.0</version>
-			<scope>test</scope>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
@@ -100,6 +95,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>spring-mock-mvc</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -122,24 +124,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.6</version>
-				<executions>
-					<execution>
-						<id>prepare</id>
-						<phase>package</phase>
-						<configuration>
-							<tasks>
-								<unzip src="${project.build.directory}/${project.build.finalName}.jar" dest="${project.build.directory}/${project.build.finalName}" />
-								<copy todir="${project.build.directory}/${project.build.finalName}/" overwrite="false">
-									<fileset dir="./" includes=".ebextensions/**"/>
-								</copy>
-								<zip compress="false" destfile="${project.build.directory}/${project.build.finalName}-AWS.jar" basedir="${project.build.directory}/${project.build.finalName}"/>
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

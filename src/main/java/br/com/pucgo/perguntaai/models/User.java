@@ -2,13 +2,26 @@ package br.com.pucgo.perguntaai.models;
 
 import br.com.pucgo.perguntaai.models.enums.AvatarOptions;
 import br.com.pucgo.perguntaai.models.enums.RoleUser;
-import lombok.*;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +54,7 @@ public class User implements UserDetails {
     private String course;
 
     @Column(name = "birth_date")
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "avatar_options")
@@ -92,7 +105,7 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public User(String name, String password, String course, RoleUser roleUser, AvatarOptions avatarOptions, LocalDateTime birthDate) {
+    public User(String name, String password, String course, RoleUser roleUser, AvatarOptions avatarOptions, LocalDate birthDate) {
         this.name = name;
         this.password = password;
         this.course = course;

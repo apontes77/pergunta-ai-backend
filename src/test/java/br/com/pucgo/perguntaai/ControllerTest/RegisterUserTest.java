@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
-public class RegisterUserTest {
+public class RegisterUserTest{
     @Autowired
     private UserController userController;
 
@@ -23,6 +23,7 @@ public class RegisterUserTest {
                 .course("análise e desenvolvimento de sistemas")
                 .password("123456")
                 .build();
+
                 
         ResponseEntity<?> userCreated = userController.register(registerUser);
 

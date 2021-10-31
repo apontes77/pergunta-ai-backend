@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class AnswerDto {
-    private Long id;
-    private String message;
-    private LocalDateTime creationDate;
-    private String authorName;
+    private final Long id;
+    private final String message;
+    private final LocalDateTime creationDate;
+    private final String authorName;
 
     public AnswerDto (Answer answer) {
         this.id = answer.getId();

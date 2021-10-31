@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -35,7 +36,7 @@ public class UserRedefineForm {
     private AvatarOptions avatarOptions;
     @NotNull
     @NotEmpty
-    private LocalDateTime birthDate;
+    private LocalDate birthDate;
 
     public UserRedefineForm(User user) {
         this.name = user.getName();

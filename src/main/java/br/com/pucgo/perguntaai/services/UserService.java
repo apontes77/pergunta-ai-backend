@@ -46,10 +46,7 @@ public class UserService {
 
     public boolean findUserByEmail(String email) {
         final Optional<User> userOptional = userRepository.findByEmail(email);
-        if(userOptional.isPresent()){
-            return true;
-        }
-        return false;
+        return userOptional.isPresent();
     }
 
     public List<User> findAll(){
@@ -88,6 +85,7 @@ public class UserService {
     }
 
     public User saveUser(User user) {
+        LOGGER.info("saving user: id={}, name={}", user.getId(), user.getName());
         return userRepository.save(user);
     }
 
