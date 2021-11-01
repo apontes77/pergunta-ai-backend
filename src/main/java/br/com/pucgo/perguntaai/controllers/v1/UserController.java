@@ -56,7 +56,6 @@ public class UserController {
 
     @PostMapping("/registration")
     @Transactional
-    @CacheEvict(value = "user", allEntries = true)
     public ResponseEntity<?> register(@RequestBody @Valid UserForm userForm) {
 
         if(!userForm.getEmail().contains("@pucgo.edu.br")){
@@ -75,7 +74,6 @@ public class UserController {
                     .toUri();
             return ResponseEntity.created(uri).body(new UserDto(userInserted));
         }
-
         return ResponseEntity.badRequest().body("Não foi possível realizar seu cadastro pois o email inserido já existe em nossa base!");
     }
 

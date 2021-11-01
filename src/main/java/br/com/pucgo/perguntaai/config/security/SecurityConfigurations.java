@@ -88,8 +88,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/v1/topics").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/v1/topics/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/user/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/user/registration").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/v1/user/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/v1/user/password/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/user/**").permitAll()
@@ -100,7 +99,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator").permitAll()
                 .anyRequest().authenticated()
-                .and().cors().and()
+                .and().cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(new AuthenticationTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
 
@@ -109,22 +108,12 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Headers","Access-Control-Allow-Origin","Access-Control-Request-Method", "Access-Control-Request-Headers","Origin","Cache-Control", "Content-Type", "Authorization"));
-        configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PATCH", "PUT"));
+        configuration.setAllowedOrigins(List.of("https://pergunta-ai.vercel.app/", "http://localhost:5000", "http://localhost:3000"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedMethods(List.of("DELETE", "GET", "POST", "PATCH", "PUT", "HEADERS", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
-            }
-        };
     }
 
 }
