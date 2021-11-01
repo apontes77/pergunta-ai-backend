@@ -100,17 +100,16 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/actuator").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/v1/user/**").permitAll()
                 .anyRequest().authenticated()
-                .and().cors().and().csrf().disable()
+                .and().cors().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(new AuthenticationTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
 
-        http.headers().frameOptions().disable();
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOrigins(List.of("http://perguntaai-env-1.eba-dfemfgsm.us-east-1.elasticbeanstalk.com/"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Headers","Access-Control-Allow-Origin","Access-Control-Request-Method", "Access-Control-Request-Headers","Origin","Cache-Control", "Content-Type", "Authorization"));
         configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PATCH", "PUT"));

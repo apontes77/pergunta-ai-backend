@@ -12,7 +12,5 @@ public enum AvatarOptions {
     AVATAR9,
     AVATAR10,
     AVATAR11,
-    AVATAR12,
-
-
+    AVATAR12
 }
