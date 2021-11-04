@@ -4,12 +4,12 @@ import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.enums.AvatarOptions;
 import br.com.pucgo.perguntaai.models.enums.RoleUser;
 import com.sun.istack.NotNull;
-import lombok.*;
-import org.hibernate.validator.constraints.Length;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,25 +17,16 @@ import java.time.LocalDateTime;
 @Setter
 public class UserRedefineForm {
     @NotNull
-    @NotEmpty
-    @Length(min = 6)
     private String name;
     @NotNull
-    @NotEmpty
-    @Length(min = 3)
     private String password;
     @NotNull
-    @NotEmpty
-    @Length(min = 3)
     private String course;
     @NotNull
-    @NotEmpty
     private RoleUser roleUser;
     @NotNull
-    @NotEmpty
     private AvatarOptions avatarOptions;
     @NotNull
-    @NotEmpty
     private LocalDate birthDate;
 
     public UserRedefineForm(User user) {
