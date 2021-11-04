@@ -16,17 +16,17 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class UserRedefineForm {
-    @NotNull
+
     private String name;
-    @NotNull
+
     private String password;
-    @NotNull
+
     private String course;
-    @NotNull
+
     private RoleUser roleUser;
-    @NotNull
+
     private AvatarOptions avatarOptions;
-    @NotNull
+
     private LocalDate birthDate;
 
     public UserRedefineForm(User user) {
