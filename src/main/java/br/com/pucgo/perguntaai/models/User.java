@@ -105,11 +105,9 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public User(String name, String password, String course, RoleUser roleUser, AvatarOptions avatarOptions, LocalDate birthDate) {
+    public User(String name, String course, AvatarOptions avatarOptions, LocalDate birthDate) {
         this.name = name;
-        this.password = password;
         this.course = course;
-        this.roleUser = roleUser;
         this.avatarOptions = avatarOptions;
         this.birthDate = birthDate;
     }
