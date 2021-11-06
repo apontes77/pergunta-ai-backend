@@ -6,19 +6,27 @@ import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.RedefinePasswordForm;
 import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
+import br.com.pucgo.perguntaai.services.MailService;
 import br.com.pucgo.perguntaai.services.PasswordResetService;
 import br.com.pucgo.perguntaai.services.UserService;
-import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -32,6 +40,9 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private MailService notificationService;
 
     private final UserService userService;
 
@@ -149,6 +160,25 @@ public class UserController {
         catch (MailException em)
         {
             return ResponseEntity.status(400).body(em);
+        }
+    }
+
+    @GetMapping("/send-mail")
+    public ResponseEntity<Void> sendMessageToRedefinePassword(@RequestParam String fromEmail,
+                                                              @RequestParam String toEmail,
+                                                              @RequestParam String subject,
+                                                              @RequestParam String body) {
+
+        try {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(fromEmail);
+            simpleMailMessage.setTo(toEmail);
+            simpleMailMessage.setSubject(subject);
+            simpleMailMessage.setText(body);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
         }
     }
 }

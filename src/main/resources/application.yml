@@ -1,0 +1,10 @@
+cloud:
+  aws:
+    region:
+      static: {AMAZON_REGION}
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: {AMAZON_ACCESS_KEY_EMAIL}
+      secret-key: {AMAZON_SECRET_KEY_EMAIL}
