@@ -19,11 +19,7 @@ public class UserRedefineForm {
 
     private String name;
 
-    private String password;
-
     private String course;
-
-    private RoleUser roleUser;
 
     private AvatarOptions avatarOptions;
 
@@ -31,9 +27,7 @@ public class UserRedefineForm {
 
     public UserRedefineForm(User user) {
         this.name = user.getName();
-        this.password = user.getPassword();
         this.course = user.getCourse();
-        this.roleUser = user.getRoleUser();
         this.avatarOptions = user.getAvatarOptions();
         this.birthDate = user.getBirthDate();
     }
