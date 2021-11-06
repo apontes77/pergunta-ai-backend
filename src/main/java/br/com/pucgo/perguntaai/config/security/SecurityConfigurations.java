@@ -108,7 +108,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://pergunta-ai.vercel.app/", "http://localhost:5000", "http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("https://pergunta-ai.vercel.app/", "http://localhost:5000/", "http://localhost:3000/"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowedMethods(List.of("DELETE", "GET", "POST", "PATCH", "PUT", "HEADERS", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
