@@ -8,6 +8,7 @@ import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 import br.com.pucgo.perguntaai.services.UserService;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -85,6 +86,18 @@ public class UserController {
         userService.deleteUser(user);
 
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("{id}")
+    @Transactional
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        try {
+            userService.deleteUserById(id);
+
+            return new ResponseEntity<String>("User excluido", HttpStatus.OK);
+        } catch (Exception e) {
+            throw new NotFoundUserException("Não foi possível excluir este usuário, lançando esta exceção: "+e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

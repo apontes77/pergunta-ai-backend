@@ -71,6 +71,15 @@ public class UserService {
                 "Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName()));
     }
 
+    public void deleteUserById(Long id){
+        try{
+            userRepository.deleteById(id);
+        }
+        catch (Exception e) {
+            throw new NotFoundUserException("user não excluído pois o mesmo não existe no BD!");
+        }
+    }
+
     public void deleteUser(User user) {
         final Page<Topic> topicPage;
 
