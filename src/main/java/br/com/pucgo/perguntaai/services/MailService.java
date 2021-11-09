@@ -20,4 +20,11 @@ public class MailService {
 
         this.mailSender.send(simpleMailMessage);
     }
+
+    public String crateBody(final String token, final String nameUser)
+    {
+        String body = "Olá" + nameUser + ", \n" +
+                " Clique no link para redefinir sua senha: https://pergunta-ai.vercel.app/forgot-password?token=" +token;
+        return body;
+    }
 }

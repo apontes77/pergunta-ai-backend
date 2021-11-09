@@ -7,7 +7,6 @@ import br.com.pucgo.perguntaai.models.form.RedefinePasswordForm;
 import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 import br.com.pucgo.perguntaai.services.MailService;
-import br.com.pucgo.perguntaai.services.PasswordResetService;
 import br.com.pucgo.perguntaai.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -144,39 +143,24 @@ public class UserController {
         }
     }
 
-    @PutMapping("/send-reset-token")
-    public ResponseEntity<?> resetPassword(HttpServletRequest request, @RequestParam("email") String userEmail) {
-        try{
-            User user = userService.getUserByEmail(userEmail);
-            String token = UUID.randomUUID().toString();
-            PasswordResetService passwordService = new PasswordResetService();
-            mailSender.send(passwordService.constructResetTokenEmail(request.toString(),
-                    request.getLocale(), token, user));
-            return ResponseEntity.status(200).body("E-mail enviado para: " + userEmail);
-
-        }catch(NotFoundUserException e){
-            return ResponseEntity.status(400).body("Usuário não encontrado! E-mail: " + userEmail + ", Tipo: " + User.class.getName());
-        }
-        catch (MailException em)
-        {
-            return ResponseEntity.status(400).body(em);
-        }
-    }
-
     @GetMapping("/send-mail")
-    public ResponseEntity<Void> sendMessageToRedefinePassword(@RequestParam String fromEmail,
-                                                              @RequestParam String toEmail,
-                                                              @RequestParam String subject,
-                                                              @RequestParam String body) {
+    public ResponseEntity<?> sendMessageToRedefinePassword(@RequestParam String fromEmail,
+                                                              @RequestParam String toEmail) {
 
         try {
+            User user = userService.getUserByEmail(toEmail);
+            String token = UUID.randomUUID().toString();
+
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             simpleMailMessage.setFrom(fromEmail);
             simpleMailMessage.setTo(toEmail);
-            simpleMailMessage.setSubject(subject);
-            simpleMailMessage.setText(body);
+            simpleMailMessage.setSubject("Redefinir Senha Pergunta aí");
+            simpleMailMessage.setText(notificationService.crateBody(token, user.getName()));
+            notificationService.sendMailMessage(simpleMailMessage);
+            return ResponseEntity.status(200).body("E-mail enviado para: " + user.getEmail() + "\n Token:" + token.toString());
 
-            return ResponseEntity.ok().build();
+        }catch(NotFoundUserException e){
+            return ResponseEntity.status(404).body("Usuário não encontrado! E-mail: " + toEmail.toString() + ", Tipo: " + User.class.getName());
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
