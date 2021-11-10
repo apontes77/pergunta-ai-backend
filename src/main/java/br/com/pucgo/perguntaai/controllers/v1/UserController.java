@@ -6,19 +6,31 @@ import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.RedefinePasswordForm;
 import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
+import br.com.pucgo.perguntaai.services.MailService;
 import br.com.pucgo.perguntaai.services.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,19 +38,18 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user")
+@AllArgsConstructor
 public class UserController {
+
+    private final MailService notificationService;
 
     private final UserService userService;
 
     private final PasswordEncoder passwordEncoder;
-
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>> getUsers() {
@@ -141,5 +152,21 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/send-mail")
+    public ResponseEntity<?> sendMessageToRedefinePassword(@RequestParam final String toEmail) {
+        try {
+            User user = userService.getUserByEmail(toEmail);
+            if(user!=null) {
+                String token = UUID.randomUUID().toString();
+                notificationService.sendMail(token, user);
+                return ResponseEntity.status(200).body("E-mail enviado para: " + user.getEmail());
+            }
+            else {
+                return ResponseEntity.status(404).body("Usuário não encontrado! E-mail: " + toEmail.toString() + ", Tipo: " + User.class.getName());
+            }
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
 

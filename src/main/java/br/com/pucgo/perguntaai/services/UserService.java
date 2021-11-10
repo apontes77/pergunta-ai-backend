@@ -5,9 +5,7 @@ import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
 import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.repositories.TopicRepository;
 
-import br.com.pucgo.perguntaai.models.DTO.UserDto;
 import br.com.pucgo.perguntaai.models.User;
-import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 
 import br.com.pucgo.perguntaai.repositories.UserRepository;
@@ -17,9 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +43,11 @@ public class UserService {
     public boolean findUserByEmail(String email) {
         final Optional<User> userOptional = userRepository.findByEmail(email);
         return userOptional.isPresent();
+    }
+    public User getUserByEmail(String email) {
+        Optional<User> obj = userRepository.findByEmail(email);
+        return obj.orElseThrow(() -> new NotFoundUserException(
+                "Usuário não encontrado! Email: " + email + ", Tipo: " + User.class.getName()));
     }
 
     public List<User> findAll(){
