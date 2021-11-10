@@ -25,17 +25,6 @@ import java.util.Properties;
 @AllArgsConstructor
 public class MailService {
 
-    private final MailSender mailSender;
-
-    public void sendMailMessage(final SimpleMailMessage simpleMailMessage) {
-        this.mailSender.send(simpleMailMessage);
-    }
-
-    public String createBody(final String token, final String nameUser) {
-        return "Olá" + nameUser + ", \n" +
-                " Clique no link para redefinir sua senha: https://pergunta-ai.vercel.app/forgot-password?token=" +token;
-    }
-
     public void sendMail(final String token, final User user) throws AddressException, MessagingException, IOException {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
