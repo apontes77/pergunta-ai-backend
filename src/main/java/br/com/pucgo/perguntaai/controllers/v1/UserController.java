@@ -157,8 +157,7 @@ public class UserController {
         try {
             User user = userService.getUserByEmail(toEmail);
             if(user!=null) {
-                String token = UUID.randomUUID().toString();
-                notificationService.sendMail(token, user);
+                notificationService.sendMail(user);
                 return ResponseEntity.status(200).body("E-mail enviado para: " + user.getEmail());
             }
             else {
