@@ -8,12 +8,9 @@ import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 import br.com.pucgo.perguntaai.services.MailService;
 import br.com.pucgo.perguntaai.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
@@ -36,21 +32,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user")
+@AllArgsConstructor
 public class UserController {
-    @Autowired
-    private JavaMailSender mailSender;
 
-    @Autowired
-    private MailService notificationService;
+    private final MailService notificationService;
 
     private final UserService userService;
 
     private final PasswordEncoder passwordEncoder;
-
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<User>> getUsers() {
@@ -143,24 +132,18 @@ public class UserController {
         }
     }
 
-    @GetMapping("/send-mail")
-    public ResponseEntity<?> sendMessageToRedefinePassword(@RequestParam String fromEmail,
-                                                              @RequestParam String toEmail) {
-
+    @GetMapping(value = "/send-mail")
+    public ResponseEntity<?> sendMessageToRedefinePassword(@RequestParam final String toEmail) {
         try {
             User user = userService.getUserByEmail(toEmail);
-            String token = UUID.randomUUID().toString();
-
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom(fromEmail);
-            simpleMailMessage.setTo(toEmail);
-            simpleMailMessage.setSubject("Redefinir Senha Pergunta aí");
-            simpleMailMessage.setText(notificationService.crateBody(token, user.getName()));
-            notificationService.sendMailMessage(simpleMailMessage);
-            return ResponseEntity.status(200).body("E-mail enviado para: " + user.getEmail() + "\n Token:" + token.toString());
-
-        }catch(NotFoundUserException e){
-            return ResponseEntity.status(404).body("Usuário não encontrado! E-mail: " + toEmail.toString() + ", Tipo: " + User.class.getName());
+            if(user!=null) {
+                String token = UUID.randomUUID().toString();
+                notificationService.sendMail(token, user);
+                return ResponseEntity.status(200).body("E-mail enviado para: " + user.getEmail());
+            }
+            else {
+                return ResponseEntity.status(404).body("Usuário não encontrado! E-mail: " + toEmail.toString() + ", Tipo: " + User.class.getName());
+            }
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
