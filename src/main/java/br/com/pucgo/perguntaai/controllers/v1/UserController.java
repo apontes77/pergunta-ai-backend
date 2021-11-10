@@ -10,17 +10,27 @@ import br.com.pucgo.perguntaai.services.MailService;
 import br.com.pucgo.perguntaai.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -58,7 +68,6 @@ public class UserController {
 
     @PostMapping("/registration")
     @Transactional
-    @CacheEvict(value = "user", allEntries = true)
     public ResponseEntity<?> register(@RequestBody @Valid UserForm userForm) {
 
         if(!userForm.getEmail().contains("@pucgo.edu.br")){
@@ -77,7 +86,6 @@ public class UserController {
                     .toUri();
             return ResponseEntity.created(uri).body(new UserDto(userInserted));
         }
-
         return ResponseEntity.badRequest().body("Não foi possível realizar seu cadastro pois o email inserido já existe em nossa base!");
     }
 
@@ -89,6 +97,18 @@ public class UserController {
         userService.deleteUser(user);
 
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("{id}")
+    @Transactional
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
+        try {
+            userService.deleteUserById(id);
+
+            return new ResponseEntity<String>("User excluido", HttpStatus.OK);
+        } catch (Exception e) {
+            throw new NotFoundUserException("Não foi possível excluir este usuário, lançando esta exceção: "+e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

@@ -11,14 +11,13 @@ import java.util.stream.Collectors;
 
 @Getter
 public class TopicDtoDetails {
-    private Long id;
-    private String title;
-    private String message;
-    private LocalDateTime creationDate;
-    private String authorName;
-    private TopicStatus status;
-    private List<AnswerDto> answers;
-    private List<String> tags;
+    private final Long id;
+    private final String message;
+    private final LocalDateTime creationDate;
+    private final String authorName;
+    private final TopicStatus status;
+    private final List<AnswerDto> answers;
+    private final List<String> tags;
 
     public TopicDtoDetails (Topic topic) {
         this.id = topic.getId();

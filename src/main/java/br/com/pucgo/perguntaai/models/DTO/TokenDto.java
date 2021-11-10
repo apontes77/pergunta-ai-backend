@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class TokenDto {
-    private Long id;
-    private String token;
-    private String type;
+    private final Long id;
+    private final String token;
+    private final String type;
     public TokenDto(Long id, String token, String type) {
         this.id = id;
         this.token = token;

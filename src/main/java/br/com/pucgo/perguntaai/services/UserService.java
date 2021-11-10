@@ -42,10 +42,7 @@ public class UserService {
 
     public boolean findUserByEmail(String email) {
         final Optional<User> userOptional = userRepository.findByEmail(email);
-        if(userOptional.isPresent()){
-            return true;
-        }
-        return false;
+        return userOptional.isPresent();
     }
     public User getUserByEmail(String email) {
         Optional<User> obj = userRepository.findByEmail(email);
@@ -75,6 +72,15 @@ public class UserService {
                 "Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName()));
     }
 
+    public void deleteUserById(Long id){
+        try{
+            userRepository.deleteById(id);
+        }
+        catch (Exception e) {
+            throw new NotFoundUserException("user não excluído pois o mesmo não existe no BD!");
+        }
+    }
+
     public void deleteUser(User user) {
         final Page<Topic> topicPage;
 
@@ -89,14 +95,13 @@ public class UserService {
     }
 
     public User saveUser(User user) {
+        LOGGER.info("saving user: id={}, name={}", user.getId(), user.getName());
         return userRepository.save(user);
     }
 
     private User updateUserData(User existentUser, User userToBeUpdated) {
         existentUser.setName(userToBeUpdated.getName());
-        existentUser.setRoleUser(userToBeUpdated.getRoleUser());
         existentUser.setCourse(userToBeUpdated.getCourse());
-        existentUser.setPassword(passwordEncoder.encode(userToBeUpdated.getPassword()));
         existentUser.setAvatarOptions(userToBeUpdated.getAvatarOptions());
         existentUser.setBirthDate(userToBeUpdated.getBirthDate());
         return existentUser;
@@ -110,9 +115,7 @@ public class UserService {
     public User fromUserRedefineForm(@Valid UserRedefineForm userRedefineForm) {
         return new User(
                 userRedefineForm.getName(),
-                userRedefineForm.getPassword(),
                 userRedefineForm.getCourse(),
-                userRedefineForm.getRoleUser(),
                 userRedefineForm.getAvatarOptions(),
                 userRedefineForm.getBirthDate()
         );

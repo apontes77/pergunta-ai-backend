@@ -6,47 +6,50 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
-public class RegisterUserTest {
+public class RegisterUserTest{
     @Autowired
     private UserController userController;
 
     @Test
-    void mustResgisterUser () {
-
-        UserForm registerUser = UserForm.builder()
-                .name("Aluno Teste")
-                .email("alunoteste@pucgo.edu.br")
-                .course("análise e desenvolvimento de sistemas")
-                .password("123456")
-                .build();
-
-        ResponseEntity<?> userCreated = userController.register(registerUser);
-        Assertions.assertEquals(userCreated.getStatusCodeValue(), 201);
-    }
-
-    @Test
-    void mustNotResgisterUser () {
-        //usuário já existe no banco de testes
-        UserForm registerUser = UserForm.builder()
-                .name("Aluno Teste")
-                .email("aluno@pucgo.edu.br")
-                .course("análise e desenvolvimento de sistemas")
-                .password("123456")
-                .build();
-
-        ResponseEntity<?> userCreated = userController.register(registerUser);
-        Assertions.assertEquals(userCreated.getStatusCodeValue(), 400);
-    }
-
-    @Test
-    void mustNotResgisterUserEmail () {
+    void mustNotRegisterUserEmail () throws Exception {
         //Email com dominio invalido
         UserForm registerUser = UserForm.builder()
                 .name("Aluno Teste")
                 .email("aluno@pucgo.edu.com.br")
+                .course("análise e desenvolvimento de sistemas")
+                .password("123456")
+                .build();
+
+                
+        ResponseEntity<?> userCreated = userController.register(registerUser);
+
+        Assertions.assertEquals(userCreated.getStatusCodeValue(), 400);
+    }
+
+    @Test
+    void mustRegisterUser () {
+
+        UserForm registerUser = UserForm.builder()
+                .name("Aluno Teste")
+                .email("2011018272671@pucgo.edu.br")
+                .course("análise e desenvolvimento de sistemas")
+                .password("123456")
+                .build();
+
+        ResponseEntity<?> userCreated = userController.register(registerUser);
+        Assertions.assertEquals(userCreated.getStatusCode(), HttpStatus.CREATED);
+    }
+
+    @Test
+    void mustNotRegisterUser () {
+        //usuário já existe no banco de testes
+        UserForm registerUser = UserForm.builder()
+                .name("Aluno Teste")
+                .email("aluno@pucgo.edu.br")
                 .course("análise e desenvolvimento de sistemas")
                 .password("123456")
                 .build();

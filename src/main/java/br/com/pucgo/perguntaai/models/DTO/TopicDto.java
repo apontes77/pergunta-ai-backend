@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 
 @Getter
 public class TopicDto {
-    private Long id;
-    private String message;
-    private String title;
-    private LocalDateTime creationDate;
+    private final Long id;
+    private final String message;
+    private final String title;
+    private final LocalDateTime creationDate;
 
 
     public TopicDto(Topic topic) {
