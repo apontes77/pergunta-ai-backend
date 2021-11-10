@@ -64,7 +64,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleUser roleUser;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Profile> profiles = new ArrayList<>();
     private LocalDateTime creationDate = LocalDateTime.now();
 
