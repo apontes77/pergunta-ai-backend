@@ -25,7 +25,7 @@ import java.util.Properties;
 @AllArgsConstructor
 public class MailService {
 
-    public void sendMail(final String token, final User user) throws AddressException, MessagingException, IOException {
+    public void sendMail(final User user) throws AddressException, MessagingException, IOException {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -42,7 +42,7 @@ public class MailService {
 
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
         msg.setSubject("Redefina sua senha do fórum Pergunta Aí!");
-        msg.setContent("<head><meta charset=\"utf-8\"></head><h3> Olá "+user.getName()+ "! Clique no link para redefinir sua senha: <a>https://pergunta-ai.vercel.app/set-password?"+token+"</a></h3>",
+        msg.setContent("<head><meta charset=\"utf-8\"></head><h3> Olá "+user.getName()+ "! Clique no link para redefinir sua senha: <a>https://pergunta-ai.vercel.app/set-password?id="+user.getId().toString()+"</a></h3>",
                 "text/html");
         msg.setSentDate(new Date());
 
