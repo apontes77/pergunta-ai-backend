@@ -19,7 +19,7 @@ public class UserRecordFieldValidationHandler {
             Pattern.compile("^[A-Z0-9._%+-]+@pucgo\\.edu\\.br$", Pattern.CASE_INSENSITIVE);
 
     public static final Pattern VALID_PASSWORD_REGEX =
-            Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,15}$", Pattern.CASE_INSENSITIVE);
+            Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&.()])[A-Za-z\\d@$!%*#?&.()]{8,15}$", Pattern.CASE_INSENSITIVE);
 
     public static final Pattern VALID_NAME_REGEX =
             Pattern.compile("^[a-zA-Z0-9_ ]{5,255}$", Pattern.CASE_INSENSITIVE);
