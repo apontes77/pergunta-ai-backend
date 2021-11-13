@@ -2,49 +2,41 @@ package br.com.pucgo.perguntaai.services;
 
 import br.com.pucgo.perguntaai.config.validation.UserRecordFieldValidationHandler;
 import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
-
 import br.com.pucgo.perguntaai.exceptions.UserRegistrationException;
 import br.com.pucgo.perguntaai.models.Topic;
-import br.com.pucgo.perguntaai.repositories.TopicRepository;
-
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
-
+import br.com.pucgo.perguntaai.repositories.TopicRepository;
 import br.com.pucgo.perguntaai.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class UserService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private TopicRepository topicRepository;
+    private final TopicRepository topicRepository;
 
-    @Autowired
-    private UserRecordFieldValidationHandler validation;
+    private final UserRecordFieldValidationHandler validation;
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+
 
     public boolean findUserByEmail(String email) {
         final Optional<User> userOptional = userRepository.findByEmail(email);
@@ -114,8 +106,8 @@ public class UserService {
         }
     }
 
-    private User saveUser(User user) {
-            return userRepository.save(user);
+    private void saveUser(User user) {
+             userRepository.save(user);
     }
 
     private User updateUserData(User existentUser, User userToBeUpdated) {

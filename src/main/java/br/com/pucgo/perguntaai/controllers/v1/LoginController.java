@@ -4,6 +4,8 @@ import br.com.pucgo.perguntaai.config.security.TokenService;
 import br.com.pucgo.perguntaai.models.DTO.TokenDto;
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.LoginForm;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,20 +21,14 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@AllArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private AuthenticationManager authManager;
+    private final AuthenticationManager authManager;
+    private final TokenService tokenService;
 
-    @Autowired
-    private TokenService tokenService;
-
-    /**
-     * é submetido email e senha do usuário a fim de gerar autenticação
-     * @param form, do tipo LoginForm
-     * @return token e identificador do usuário
-     */
     @PostMapping
+    @Operation(description = "gera um token de autenticação para o usuário no ato do login.")
     public ResponseEntity<?> authenticate(@RequestBody @Valid LoginForm form) {
         UsernamePasswordAuthenticationToken loginData = form.convert();
         try {

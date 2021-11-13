@@ -9,6 +9,7 @@ import br.com.pucgo.perguntaai.models.form.UserForm;
 import br.com.pucgo.perguntaai.models.form.UserRedefineForm;
 import br.com.pucgo.perguntaai.services.MailService;
 import br.com.pucgo.perguntaai.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -54,12 +56,16 @@ public class UserController {
 
     private final PasswordEncoder passwordEncoder;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.status(200).body(userService.findAll());
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(description = "obtém a lista de usuários cadastrados")
+    @ResponseBody
+    public List<User> getUsers() {
+        return userService.findAll();
     }
 
-    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    @GetMapping(value ="/{id}")
+    @Operation(description = "obtém um usuário por seu ID")
     public ResponseEntity<?> find(@PathVariable Long id) {
         try{
             User obj = userService.findById(id);
@@ -71,6 +77,7 @@ public class UserController {
 
     @PostMapping("/registration")
     @Transactional
+    @Operation(description = "permite cadastrar um novo usuário")
     public ResponseEntity<?> register(@RequestBody @Valid UserForm userForm) {
 
         if(!userService.findUserByEmail(userForm.getEmail())) {
@@ -95,6 +102,7 @@ public class UserController {
     @DeleteMapping
     @Transactional
     @CacheEvict(value = "user", allEntries = true)
+    @Operation(description = "permite excluir um usuário")
     public ResponseEntity<?> delete(@RequestBody User user) {
         userService.deleteUser(user);
         return ResponseEntity.ok().build();
@@ -102,6 +110,7 @@ public class UserController {
 
     @DeleteMapping("{id}")
     @Transactional
+    @Operation(description = "permite excluir um usuário por meio de seu ID")
     public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
         try {
             userService.deleteUserById(id);
@@ -114,6 +123,7 @@ public class UserController {
     @PutMapping("/{id}")
     @Transactional
     @CacheEvict(value = "user", allEntries = true)
+    @Operation(description = "permite atualizar o cadastro de usuário")
     public ResponseEntity<?> update(@RequestBody UserRedefineForm userRedefineForm, @PathVariable Long id){
         try{
             User obj = userService.fromUserRedefineForm(userRedefineForm);
@@ -134,6 +144,7 @@ public class UserController {
     @PutMapping("/password/{id}")
     @Transactional
     @CacheEvict(value = "user", allEntries = true)
+    @Operation(description = "permite atualizar a senha de usuário")
     public ResponseEntity<?> updatePassword(@RequestBody RedefinePasswordForm redefinePasswordForm, @PathVariable Long id){
         try{
             User obj = User.builder()
@@ -154,6 +165,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/send-mail")
+    @Operation(description = "realiza envio de email para redefinição de senha")
     public ResponseEntity<?> sendMessageToRedefinePassword(@RequestParam final String toEmail) {
         try {
             User user = userService.getUserByEmail(toEmail);

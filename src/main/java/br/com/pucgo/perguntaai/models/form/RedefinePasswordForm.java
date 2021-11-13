@@ -16,6 +16,5 @@ import javax.validation.constraints.NotEmpty;
 public class RedefinePasswordForm {
     @NotNull
     @NotEmpty
-    @Length(min = 3)
     private String password;
 }
