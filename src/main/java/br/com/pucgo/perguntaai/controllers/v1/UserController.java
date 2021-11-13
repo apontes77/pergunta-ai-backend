@@ -1,6 +1,7 @@
 package br.com.pucgo.perguntaai.controllers.v1;
 
 import br.com.pucgo.perguntaai.exceptions.NotFoundUserException;
+import br.com.pucgo.perguntaai.exceptions.UserRegistrationException;
 import br.com.pucgo.perguntaai.models.DTO.UserDto;
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.RedefinePasswordForm;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -70,23 +72,23 @@ public class UserController {
     @Transactional
     public ResponseEntity<?> register(@RequestBody @Valid UserForm userForm) {
 
-        if(!userForm.getEmail().contains("@pucgo.edu.br")){
-            return ResponseEntity.status(400).body("E-mail inválido! O email deve ser do domínio: @pucgo.edu.br");
-        }
-
         if(!userService.findUserByEmail(userForm.getEmail())) {
             User user = userForm.convert();
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            final User userInserted = userService.saveUser(user);
+            if(userService.userRegisterValidation(user).isPresent()) {
+                final User userInserted = userService.saveUser(user);
 
-            URI uri = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(userInserted.getId())
-                    .toUri();
-            return ResponseEntity.created(uri).body(new UserDto(userInserted));
+                URI uri = ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(userInserted.getId())
+                        .toUri();
+                return ResponseEntity.created(uri).body(new UserDto(userInserted));
+            }
+            else {
+                return ResponseEntity.badRequest().body(new UserRegistrationException("Existem campos inválidos no cadastro deste usuário!"));
+            }
         }
-        return ResponseEntity.badRequest().body("Não foi possível realizar seu cadastro pois o email inserido já existe em nossa base!");
+        return ResponseEntity.badRequest().body("Já existe usuário com este email registrado!");
     }
 
 
@@ -95,7 +97,6 @@ public class UserController {
     @CacheEvict(value = "user", allEntries = true)
     public ResponseEntity<?> delete(@RequestBody User user) {
         userService.deleteUser(user);
-
         return ResponseEntity.ok().build();
     }
 
@@ -104,7 +105,6 @@ public class UserController {
     public ResponseEntity<?> deleteUserById(@PathVariable Long id) {
         try {
             userService.deleteUserById(id);
-
             return new ResponseEntity<String>("User excluido", HttpStatus.OK);
         } catch (Exception e) {
             throw new NotFoundUserException("Não foi possível excluir este usuário, lançando esta exceção: "+e.getMessage());
@@ -130,6 +130,7 @@ public class UserController {
             return ResponseEntity.status(400).body("Objeto não encontrado! Id: " + id + ", Tipo: " + User.class.getName());
         }
     }
+
     @PutMapping("/password/{id}")
     @Transactional
     @CacheEvict(value = "user", allEntries = true)

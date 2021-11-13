@@ -1,5 +1,6 @@
 package br.com.pucgo.perguntaai.config.validation;
 
+import br.com.pucgo.perguntaai.exceptions.UserRegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestControllerAdvice
 public class ValidationErrorHandler {
+
     @Autowired
     private MessageSource messageSource;
 
@@ -30,5 +32,10 @@ public class ValidationErrorHandler {
             formErrorDtos.add(error);
         });
         return formErrorDtos;
+    }
+
+    @ExceptionHandler(UserRegistrationException.class)
+    public FormErrorDto handleUserRegistrationException(UserRegistrationException ex) {
+        return new FormErrorDto("Algum problema na inserção de novo usuário", ex.getMessage());
     }
 }

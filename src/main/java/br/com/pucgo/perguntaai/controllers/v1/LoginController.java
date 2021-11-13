@@ -48,8 +48,4 @@ public class LoginController {
             return ResponseEntity.badRequest().build();
         }
     }
-
-    /**
-     * aqui poderia criar o controller para "esqueci minha senha", por exemplo.
-     */
 }
