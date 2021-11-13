@@ -6,7 +6,6 @@ import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.form.LoginForm;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
