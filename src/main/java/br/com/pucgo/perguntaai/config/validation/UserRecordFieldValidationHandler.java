@@ -44,7 +44,7 @@ public class UserRecordFieldValidationHandler {
             return Optional.empty();
         }
 
-        LOGGER.info("saving user: name={}", user.getName());
+        LOGGER.info("Dados inseridos são válidos: email={}, senha={}, nome={}", user.getEmail(), user.getPassword(), user.getName());
         return Optional.of(user);
     }
 }

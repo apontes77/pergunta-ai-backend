@@ -40,6 +40,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -74,23 +75,22 @@ public class UserController {
 
         if(!userService.findUserByEmail(userForm.getEmail())) {
             User user = userForm.convert();
-            if(userService.userRegisterValidation(user).isPresent()) {
-                final User userInserted = userService.saveUser(user);
-
-                URI uri = ServletUriComponentsBuilder
-                        .fromCurrentRequest()
-                        .path("/{id}")
-                        .buildAndExpand(userInserted.getId())
-                        .toUri();
-                return ResponseEntity.created(uri).body(new UserDto(userInserted));
-            }
-            else {
-                return ResponseEntity.badRequest().body(new UserRegistrationException("Existem campos inválidos no cadastro deste usuário!"));
+            try {
+                Optional<User> registerValidation = userService.userRegisterValidation(user);
+                if (registerValidation.isPresent()) {
+                    URI uri = ServletUriComponentsBuilder
+                            .fromCurrentRequest()
+                            .path("/{id}")
+                            .buildAndExpand(registerValidation.get().getId())
+                            .toUri();
+                    return ResponseEntity.created(uri).body(new UserDto(registerValidation.get()));
+                }
+            } catch(Exception e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
             }
         }
         return ResponseEntity.badRequest().body("Já existe usuário com este email registrado!");
     }
-
 
     @DeleteMapping
     @Transactional

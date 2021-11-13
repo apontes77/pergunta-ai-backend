@@ -104,7 +104,8 @@ public class UserService {
     public Optional<User> userRegisterValidation(User user) {
         if(validation.validationOfFieldsInSavingUser(user).isPresent()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            LOGGER.info("salvando usuário com: name={}", user.getName());
+            LOGGER.info("validadas as credenciais do usuário com nome={}", user.getName());
+            saveUser(user);
             return Optional.of(user);
         }
 
@@ -113,7 +114,7 @@ public class UserService {
         }
     }
 
-    public User saveUser(User user) {
+    private User saveUser(User user) {
             return userRepository.save(user);
     }
 
