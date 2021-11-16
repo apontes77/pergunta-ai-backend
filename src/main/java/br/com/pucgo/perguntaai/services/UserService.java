@@ -36,7 +36,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-
     public boolean findUserByEmail(String email) {
         final Optional<User> userOptional = userRepository.findByEmail(email);
         return userOptional.isPresent();
