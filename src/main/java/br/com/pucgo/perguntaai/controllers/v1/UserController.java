@@ -76,7 +76,6 @@ public class UserController {
 
     @DeleteMapping
     @Transactional
-    @CacheEvict(value = "user", allEntries = true)
     @Operation(description = "permite excluir um usuário")
     public ResponseEntity<?> delete(@RequestBody User user) {
         userService.deleteUser(user);
@@ -97,7 +96,6 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Transactional
-    @CacheEvict(value = "user", allEntries = true)
     @Operation(description = "permite atualizar o cadastro de usuário")
     public ResponseEntity<?> update(@RequestBody UserRedefineForm userRedefineForm, @PathVariable Long id){
         try{
@@ -118,7 +116,6 @@ public class UserController {
 
     @PutMapping("/password/{id}")
     @Transactional
-    @CacheEvict(value = "user", allEntries = true)
     @Operation(description = "permite atualizar a senha de usuário")
     public ResponseEntity<?> updatePassword(@RequestBody RedefinePasswordForm redefinePasswordForm, @PathVariable Long id){
         try{

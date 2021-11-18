@@ -35,7 +35,6 @@ public class TopicsController {
 
     @ApiResponse(description = "retorna os tópicos do fórum")
     @GetMapping
-    @Cacheable(value = "topicsList")
     @Operation(summary = "list topics", security = @SecurityRequirement(name = "bearerAuth"))
     public Page<TopicDto> list(@RequestParam(required = false) String status,
                                @Parameter(hidden = true) @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
@@ -51,7 +50,6 @@ public class TopicsController {
 
     @PostMapping
     @Transactional
-    @CacheEvict(value = "topicsList", allEntries = true)
     @Operation(summary = "insert topic", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<TopicDto> register(@RequestBody @Valid TopicForm topicForm,
                                              UriComponentsBuilder uriBuilder) {
@@ -72,7 +70,6 @@ public class TopicsController {
 
     @PutMapping("/{id}")
     @Transactional
-    @CacheEvict(value = "topicsList", allEntries = true)
     @Operation(summary = "update topic", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<TopicDto> update(@PathVariable Long id,
                                            @RequestBody @Valid TopicFormUpdate topicForm) {
@@ -86,7 +83,6 @@ public class TopicsController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    @CacheEvict(value = "topicsList", allEntries = true)
     @Operation(summary = "delete topic", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Topic> topicOptional = topicRepository.findById(id);
