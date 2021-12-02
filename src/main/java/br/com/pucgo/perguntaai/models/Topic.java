@@ -37,7 +37,7 @@ public class Topic {
 
     @ManyToOne
     @JsonProperty("author")
-    private User author;
+    private User author = new User();
 
     @JsonProperty("status")
     @Enumerated(EnumType.STRING)
@@ -53,9 +53,10 @@ public class Topic {
     private List<String> tags = new ArrayList<>();
 
 
-    public Topic(String title, String message, List<String> tags) {
+    public Topic(String title, String message, List<String> tags, Long authorId) {
         this.title = title;
         this.message = message;
         this.tags = tags;
+        this.author.setId(authorId);
     }
 }

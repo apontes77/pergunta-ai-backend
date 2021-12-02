@@ -4,8 +4,11 @@ import br.com.pucgo.perguntaai.models.DTO.TopicDto;
 import br.com.pucgo.perguntaai.models.DTO.TopicDtoDetails;
 import br.com.pucgo.perguntaai.models.DTO.TopicFormUpdate;
 import br.com.pucgo.perguntaai.models.Topic;
+import br.com.pucgo.perguntaai.models.User;
+import br.com.pucgo.perguntaai.models.enums.TopicStatus;
 import br.com.pucgo.perguntaai.models.form.TopicForm;
 import br.com.pucgo.perguntaai.repositories.TopicRepository;
+import br.com.pucgo.perguntaai.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,6 +35,9 @@ public class TopicsController {
 
     @Autowired
     private TopicRepository topicRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @ApiResponse(description = "retorna os tópicos do fórum")
     @GetMapping
@@ -71,10 +77,18 @@ public class TopicsController {
     @PutMapping("/{id}")
     @Transactional
     @Operation(summary = "update topic", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<TopicDto> update(@PathVariable Long id,
+    public ResponseEntity<?> update(@PathVariable Long id,
                                            @RequestBody @Valid TopicFormUpdate topicForm) {
-        Optional<Topic> topicOptional = topicRepository.findById(id);
-        if (topicOptional.isPresent()) {
+        Optional<Topic> oldTopicOptional = topicRepository.findById(id);
+        if (oldTopicOptional.isPresent()) {
+            if(!oldTopicOptional.get().getAuthor().getId().equals(topicForm.getAuthorId()))
+            {
+                return ResponseEntity.status(403).body("Somente o criador do tópico pode altualizar seu conteudo.");
+            }
+            if(oldTopicOptional.get().getStatus().equals(TopicStatus.CLOSED) || oldTopicOptional.get().getStatus().equals(TopicStatus.SOLVED))
+            {
+                return ResponseEntity.status(403).body("Status do tópico está como fechado ou resolvido. Não é possivel editar seu conteudo.");
+            }
             Topic topic = topicForm.update(id, topicRepository);
             return ResponseEntity.ok(new TopicDto(topic));
         }

@@ -24,8 +24,10 @@ public class TopicForm {
     @NotNull
     @NotEmpty
     private List<String> tags = new ArrayList<>();
+    
+    private Long authorId;
 
     public Topic convert() {
-        return new Topic(title, message, tags);
+        return new Topic(title, message, tags, authorId);
     }
 }
