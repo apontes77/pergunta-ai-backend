@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
-    //Page<Answer> findByStatus(String status, Pageable pagination);
     Optional<Answer> findByTopicAndAuthor(Topic topic, User user);
     Page<Answer> findByTopic(Topic topic, Pageable pagination);
 }

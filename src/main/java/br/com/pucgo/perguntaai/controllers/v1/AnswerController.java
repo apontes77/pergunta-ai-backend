@@ -96,16 +96,21 @@ public class AnswerController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     @Transactional
     @Operation(summary = "delete answer", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        Optional<Topic> topicOptional = topicRepository.findById(id);
-        if (topicOptional.isPresent()) {
-            topicRepository.deleteById(id);
+        Optional<Answer> answerOptional = answerRepository.findById(id);
+        if (answerOptional.isPresent()) {
+            if(answerOptional.get().getTopic().getStatus().equals(TopicStatus.CLOSED) || answerOptional.get().getTopic().getStatus().equals(TopicStatus.SOLVED)){
+                return ResponseEntity.status(403).body("Status do tópico está como fechado ou resolvido. Não é possivel excluir sua resposta.");
+            }
+            if(answerOptional.get().isSolution())
+                return ResponseEntity.status(403).body("Essa resposta é a solução do tópico. Não é possivel excluir sua resposta.");
+            answerRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
-    }
+    }*/
 }
 
