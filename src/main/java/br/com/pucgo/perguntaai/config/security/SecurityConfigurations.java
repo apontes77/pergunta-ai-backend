@@ -87,13 +87,22 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/v1/topics/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/topics").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/v1/topics/**").permitAll()
+
+                .antMatchers(HttpMethod.GET, "/api/v1/answers/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/answers").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/v1/answers/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/answers/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/v1/answers/**").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/api/v1/user/registration").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/v1/user/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/v1/user/password/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/user/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/user").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/v1/user/**").permitAll()
+
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
@@ -102,7 +111,6 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .and().cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(new AuthenticationTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
-
     }
 
     @Bean

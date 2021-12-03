@@ -77,7 +77,7 @@ public class UserController {
     @DeleteMapping
     @Transactional
     @Operation(description = "permite excluir um usuário")
-    public ResponseEntity<?> delete(@RequestBody User user) {
+    public ResponseEntity<User> delete(@RequestBody User user) {
         userService.deleteUser(user);
         return ResponseEntity.ok().build();
     }

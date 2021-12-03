@@ -1,6 +1,8 @@
 package br.com.pucgo.perguntaai.models;
 
+import br.com.pucgo.perguntaai.models.DTO.UserAdaptedForAnswerDTO;
 import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,9 +19,8 @@ public class Answer {
     private Long id;
     private String message;
     private LocalDateTime creationDate;
-    @ManyToOne
-    private User author;
-    private boolean solution = false;
     @OneToOne
-    private AnswerLike answerLike;
+    private UserAdaptedForAnswerDTO user;
+    @ManyToOne
+    private Topic topic;
 }

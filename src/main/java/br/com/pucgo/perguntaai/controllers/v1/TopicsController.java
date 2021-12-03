@@ -35,9 +35,10 @@ public class TopicsController {
 
     @ApiResponse(description = "retorna os tópicos do fórum")
     @GetMapping
-    @Operation(summary = "list topics", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "lista os tópicos na dashboard principal", security = @SecurityRequirement(name = "bearerAuth"))
     public Page<TopicDto> list(@RequestParam(required = false) String status,
-                               @Parameter(hidden = true) @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
+                               @Parameter(hidden = true)
+                               @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
         final Page<Topic> topicPage;
         if (status == null) {
@@ -50,8 +51,8 @@ public class TopicsController {
 
     @PostMapping
     @Transactional
-    @Operation(summary = "insert topic", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<TopicDto> register(@RequestBody @Valid TopicForm topicForm,
+    @Operation(summary = "insere tópicos sem respostas", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<TopicDto> registerTopicWithoutAnswers(@RequestBody @Valid TopicForm topicForm,
                                              UriComponentsBuilder uriBuilder) {
         Topic topic = topicForm.convert();
         topicRepository.save(topic);
@@ -61,7 +62,7 @@ public class TopicsController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "details topic", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "detalha um tópico escolhido", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<TopicDtoDetails> detail(@PathVariable("id") Long id) {
         Optional<Topic> topic = topicRepository.findById(id);
         return topic.map(value -> ResponseEntity.ok(new TopicDtoDetails(value)))
@@ -70,7 +71,7 @@ public class TopicsController {
 
     @PutMapping("/{id}")
     @Transactional
-    @Operation(summary = "update topic", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "atualiza um tópico", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<TopicDto> update(@PathVariable Long id,
                                            @RequestBody @Valid TopicFormUpdate topicForm) {
         Optional<Topic> topicOptional = topicRepository.findById(id);
@@ -83,7 +84,7 @@ public class TopicsController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    @Operation(summary = "delete topic", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "exclui um tópico", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Optional<Topic> topicOptional = topicRepository.findById(id);
         if (topicOptional.isPresent()) {

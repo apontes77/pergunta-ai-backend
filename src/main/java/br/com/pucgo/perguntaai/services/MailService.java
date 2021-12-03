@@ -13,10 +13,7 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
+import javax.mail.internet.*;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
@@ -42,12 +39,9 @@ public class MailService {
 
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
         msg.setSubject("Redefina sua senha do fórum Pergunta Aí!");
-        msg.setContent("<head><meta charset=\"utf-8\"></head><h3> Olá "+user.getName()+ "! Clique no link para redefinir sua senha: <a>https://pergunta-ai.vercel.app/set-password?id="+user.getId().toString()+"</a></h3>",
+        msg.setContent("Olá "+user.getName()+ "! Clique no link para redefinir sua senha: \n<a href='https://pergunta-ai.vercel.app/set-password?id="+user.getId().toString()+"'>Clique aqui</a>",
                 "text/html");
         msg.setSentDate(new Date());
-
-        MimeBodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setContent("Tutorials point email", "text/html");
 
 
         Transport.send(msg);

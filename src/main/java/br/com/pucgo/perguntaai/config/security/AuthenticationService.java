@@ -20,7 +20,7 @@ public class AuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String emailAuthentication) throws UsernameNotFoundException {
         final Optional<User> user = userRepository.findByEmail(emailAuthentication);
         if (user.isPresent()) {
-            return User.builder()
+            return (UserDetails) User.builder()
                     .id(user.get().getId())
                     .name(user.get().getName())
                     .email(user.get().getEmail())
