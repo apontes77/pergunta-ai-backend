@@ -10,6 +10,7 @@ import br.com.pucgo.perguntaai.services.MailService;
 import br.com.pucgo.perguntaai.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/user")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
 
     private final MailService notificationService;

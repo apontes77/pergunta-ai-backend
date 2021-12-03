@@ -1,6 +1,8 @@
 package br.com.pucgo.perguntaai.models.DTO;
 
 import br.com.pucgo.perguntaai.models.Topic;
+import br.com.pucgo.perguntaai.models.User;
+import br.com.pucgo.perguntaai.models.enums.TopicStatus;
 import br.com.pucgo.perguntaai.repositories.TopicRepository;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
@@ -15,11 +17,19 @@ public class TopicFormUpdate {
     private String title;
     @NotEmpty @NotNull @Length(min = 10)
     private String message;
+    @NotNull
+    private TopicStatus status;
+    @NotNull
+    private Long authorId;
 
     public Topic update(Long id, TopicRepository topicRepository) {
         Topic topic = topicRepository.getById(id);
         topic.setTitle(this.title);
         topic.setMessage(this.message);
+        User author = topic.getAuthor();
+        author.setId(this.authorId);
+        topic.setAuthor(author);
+        topic.setStatus(this.status);
 
         return topic;
     }

@@ -53,9 +53,11 @@ public class Topic {
     private List<String> tags = new ArrayList<>();
 
 
-    public Topic(String title, String message, List<String> tags) {
+    public Topic(String title, String message, List<String> tags, Long authorId) {
         this.title = title;
         this.message = message;
         this.tags = tags;
+        this.author  = new User();
+        this.author.setId(authorId);
     }
 }
