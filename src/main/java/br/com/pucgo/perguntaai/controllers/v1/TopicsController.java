@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,20 +32,17 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/topics")
+@RequiredArgsConstructor
 public class TopicsController {
 
-    @Autowired
-    private TopicRepository topicRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final TopicRepository topicRepository;
+    private final UserRepository userRepository;
 
     @ApiResponse(description = "retorna os tópicos do fórum")
     @GetMapping
     @Operation(summary = "list topics", security = @SecurityRequirement(name = "bearerAuth"))
     public Page<TopicDto> list(@RequestParam(required = false) String status,
                                @Parameter(hidden = true) @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
-
         final Page<Topic> topicPage;
         if (status == null) {
             topicPage = topicRepository.findAll(pagination);
