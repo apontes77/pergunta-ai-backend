@@ -1,8 +1,10 @@
 package br.com.pucgo.perguntaai.models.DTO;
 
 import br.com.pucgo.perguntaai.models.Answer;
+import br.com.pucgo.perguntaai.models.Topic;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 
@@ -19,5 +21,9 @@ public class AnswerDto {
         this.message = answer.getMessage();
         this.creationDate = answer.getCreationDate();
         this.authorName = answer.getAuthor().getName();
+    }
+
+    public static Page<AnswerDto> convert(Page<Answer> answers) {
+        return answers.map(AnswerDto::new);
     }
 }
