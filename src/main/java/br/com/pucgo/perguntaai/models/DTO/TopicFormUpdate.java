@@ -26,9 +26,9 @@ public class TopicFormUpdate {
         Topic topic = topicRepository.getById(id);
         topic.setTitle(this.title);
         topic.setMessage(this.message);
-        User auhtor = topic.getAuthor();
-        auhtor.setId(this.authorId);
-        topic.setAuthor(auhtor);
+        User author = topic.getAuthor();
+        author.setId(this.authorId);
+        topic.setAuthor(author);
         topic.setStatus(this.status);
 
         return topic;

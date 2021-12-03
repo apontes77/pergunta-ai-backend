@@ -37,7 +37,7 @@ public class Topic {
 
     @ManyToOne
     @JsonProperty("author")
-    private User author = new User();
+    private User author;
 
     @JsonProperty("status")
     @Enumerated(EnumType.STRING)
@@ -57,6 +57,7 @@ public class Topic {
         this.title = title;
         this.message = message;
         this.tags = tags;
+        this.author  = new User();
         this.author.setId(authorId);
     }
 }

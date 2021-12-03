@@ -81,12 +81,10 @@ public class TopicsController {
                                            @RequestBody @Valid TopicFormUpdate topicForm) {
         Optional<Topic> oldTopicOptional = topicRepository.findById(id);
         if (oldTopicOptional.isPresent()) {
-            if(!oldTopicOptional.get().getAuthor().getId().equals(topicForm.getAuthorId()))
-            {
+            if(!oldTopicOptional.get().getAuthor().getId().equals(topicForm.getAuthorId())){
                 return ResponseEntity.status(403).body("Somente o criador do tópico pode altualizar seu conteudo.");
             }
-            if(oldTopicOptional.get().getStatus().equals(TopicStatus.CLOSED) || oldTopicOptional.get().getStatus().equals(TopicStatus.SOLVED))
-            {
+            if(oldTopicOptional.get().getStatus().equals(TopicStatus.CLOSED) || oldTopicOptional.get().getStatus().equals(TopicStatus.SOLVED)){
                 return ResponseEntity.status(403).body("Status do tópico está como fechado ou resolvido. Não é possivel editar seu conteudo.");
             }
             Topic topic = topicForm.update(id, topicRepository);
