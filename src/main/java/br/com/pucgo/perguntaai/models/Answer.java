@@ -24,8 +24,7 @@ public class Answer {
     @ManyToOne(cascade = CascadeType.ALL)
     private Topic topic;
     private boolean solution = false;
-    @OneToOne
-    private AnswerLike answerLike;
+    private int answerLike = 0;
 
     public Answer(String message, Long authorId, Long topicId) {
         this.message = message;
