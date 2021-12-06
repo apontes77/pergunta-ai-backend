@@ -1,6 +1,7 @@
 package br.com.pucgo.perguntaai.models.DTO;
 
 import br.com.pucgo.perguntaai.models.Topic;
+import br.com.pucgo.perguntaai.models.enums.AvatarOptions;
 import br.com.pucgo.perguntaai.models.enums.TopicStatus;
 import lombok.Getter;
 
@@ -15,6 +16,9 @@ public class TopicDtoDetails {
     private final String message;
     private final LocalDateTime creationDate;
     private final String authorName;
+    private final String title;
+    private final AvatarOptions avatar;
+
     private final TopicStatus status;
     private final List<AnswerDto> answers;
     private final List<String> tags;
@@ -25,6 +29,8 @@ public class TopicDtoDetails {
         this.creationDate = topic.getCreationDate();
         this.authorName = topic.getAuthor().getName();
         this.status = topic.getStatus();
+        this.title = topic.getTitle();
+        this.avatar = topic.getAuthor().getAvatarOptions();
         this.answers = new ArrayList<>();
         this.answers.addAll(topic.getAnswers()
                                     .stream()

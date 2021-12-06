@@ -2,13 +2,11 @@ package br.com.pucgo.perguntaai.controllers.v1;
 
 import br.com.pucgo.perguntaai.models.Answer;
 import br.com.pucgo.perguntaai.models.DTO.AnswerDto;
-import br.com.pucgo.perguntaai.models.DTO.TopicDto;
-import br.com.pucgo.perguntaai.models.form.AnswerUpdateForm;
-import br.com.pucgo.perguntaai.models.form.TopicFormUpdate;
 import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.models.User;
 import br.com.pucgo.perguntaai.models.enums.TopicStatus;
 import br.com.pucgo.perguntaai.models.form.AnswerForm;
+import br.com.pucgo.perguntaai.models.form.AnswerUpdateForm;
 import br.com.pucgo.perguntaai.repositories.AnswerRepository;
 import br.com.pucgo.perguntaai.repositories.TopicRepository;
 import br.com.pucgo.perguntaai.repositories.UserRepository;
@@ -17,7 +15,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -70,6 +68,11 @@ public class AnswerController {
         if(topic.getStatus().equals(TopicStatus.SOLVED) || topic.getStatus().equals(TopicStatus.CLOSED))
             return ResponseEntity.status(403).body("Este tópico está resolvido ou fechado. Não é possivel enviar novas respostas para ele.");
         answerRepository.save(newAnswer);
+
+        List<Answer> answers = topic.getAnswers();
+        answers.add(newAnswer);
+        topic.setAnswers(answers);
+
         URI uri = uriBuilder.path("/answer/{id}").buildAndExpand(newAnswer.getId()).toUri();
         return ResponseEntity.created(uri).body(new AnswerDto(newAnswer));
     }
@@ -95,7 +98,7 @@ public class AnswerController {
         return ResponseEntity.notFound().build();
     }
 
-    /*@DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     @Transactional
     @Operation(summary = "delete answer", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> delete(@PathVariable Long id) {
@@ -110,6 +113,6 @@ public class AnswerController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
-    }*/
+    }
 }
 

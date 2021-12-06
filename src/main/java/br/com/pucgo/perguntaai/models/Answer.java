@@ -21,7 +21,7 @@ public class Answer {
     private LocalDateTime creationDate = LocalDateTime.now();
     @ManyToOne
     private User author;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Topic topic;
     private boolean solution = false;
     private int answerLike = 0;
