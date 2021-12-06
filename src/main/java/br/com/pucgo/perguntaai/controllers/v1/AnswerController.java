@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,14 +33,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/answer")
+@RequiredArgsConstructor
 public class AnswerController {
 
-    @Autowired
-    private AnswerRepository answerRepository;
-    @Autowired
-    private TopicRepository topicRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private final AnswerRepository answerRepository;
+    private final TopicRepository topicRepository;
+    private final UserRepository userRepository;
 
     @ApiResponse(description = "retorna as resposta do tópico selecionado")
     @GetMapping("/{id}")
