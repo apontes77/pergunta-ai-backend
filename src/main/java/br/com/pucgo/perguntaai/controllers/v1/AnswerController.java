@@ -98,6 +98,27 @@ public class AnswerController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/{id}/{like}")
+    @Transactional
+    @Operation(summary = "like answer", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<?> update(@PathVariable Long id, @PathVariable boolean like) {
+        Optional<Answer> answerOptional = answerRepository.findById(id);
+        if (answerOptional.isPresent()) {
+            Answer answer = answerOptional.get();
+            if(like)
+                answer.setAnswerLike(answer.getAnswerLike() + 1);
+            else
+            {
+                if(answer.getAnswerLike() != 0)
+                    answer.setAnswerLike(answer.getAnswerLike() - 1);
+                return ResponseEntity.status(403).body("Essa resposta já possui 0 likes.");
+            }
+
+            return ResponseEntity.ok(new AnswerDto(answerRepository.save(answer)));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @DeleteMapping("/{id}")
     @Transactional
     @Operation(summary = "delete answer", security = @SecurityRequirement(name = "bearerAuth"))
