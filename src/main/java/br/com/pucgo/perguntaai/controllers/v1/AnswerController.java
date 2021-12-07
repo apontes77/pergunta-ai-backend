@@ -111,7 +111,7 @@ public class AnswerController {
             {
                 if(answer.getAnswerLike() != 0)
                     answer.setAnswerLike(answer.getAnswerLike() - 1);
-                return ResponseEntity.status(403).body("Essa resposta já possui 0 likes.");
+                else return ResponseEntity.status(403).body("Essa resposta já possui 0 likes.");
             }
 
             return ResponseEntity.ok(new AnswerDto(answerRepository.save(answer)));
