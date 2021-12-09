@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class TopicDto {
@@ -20,6 +21,7 @@ public class TopicDto {
     private AvatarOptions avatar;
     private String name;
     private final TopicStatus status;
+    private final List<String> tags;
 
 
     public TopicDto(Topic topic) {
@@ -32,6 +34,7 @@ public class TopicDto {
         this.totalOfAnswers = topic.getAnswers().size();
         this.avatar = topic.getAuthor().getAvatarOptions();
         this.name = topic.getAuthor().getName();
+        this.tags = topic.getTags();
     }
 
     public static Page<TopicDto> convert(Page<Topic> topics) {
