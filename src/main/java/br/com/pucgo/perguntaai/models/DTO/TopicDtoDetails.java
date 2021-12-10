@@ -15,6 +15,7 @@ public class TopicDtoDetails {
     private final Long id;
     private final String message;
     private final LocalDateTime creationDate;
+    private final Long authorId;
     private final String authorName;
     private final String title;
     private final AvatarOptions avatar;
@@ -27,6 +28,7 @@ public class TopicDtoDetails {
         this.id = topic.getId();
         this.message = topic.getMessage();
         this.creationDate = topic.getCreationDate();
+        this.authorId = topic.getAuthor().getId();
         this.authorName = topic.getAuthor().getName();
         this.status = topic.getStatus();
         this.title = topic.getTitle();
