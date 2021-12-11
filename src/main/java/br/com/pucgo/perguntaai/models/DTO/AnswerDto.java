@@ -15,6 +15,7 @@ public class AnswerDto {
     private final Long id;
     private final String message;
     private final LocalDateTime creationDate;
+    private final Long authorId;
     private final String authorName;
     private final AvatarOptions authorAvatar;
     private final int answerLikes;
@@ -24,6 +25,7 @@ public class AnswerDto {
         this.id = answer.getId();
         this.message = answer.getMessage();
         this.creationDate = answer.getCreationDate();
+        this.authorId = answer.getAuthor().getId();
         this.authorName = answer.getAuthor().getName();
         this.authorAvatar = answer.getAuthor().getAvatarOptions();
         this.answerLikes = answer.getAnswerLike();
