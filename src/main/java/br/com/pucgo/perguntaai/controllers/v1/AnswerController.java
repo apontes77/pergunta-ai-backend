@@ -62,9 +62,6 @@ public class AnswerController {
         Topic topic = topicRepository.getById(newAnswer.getTopic().getId());
         newAnswer.setTopic(topic);
 
-        Optional<Answer> answerOptional = answerRepository.findByTopicAndAuthor(topic,author);
-        if(answerOptional.isPresent())
-            return ResponseEntity.status(403).body("Este usuário já respondeu esse tópico.");
         if(topic.getStatus().equals(TopicStatus.SOLVED) || topic.getStatus().equals(TopicStatus.CLOSED))
             return ResponseEntity.status(403).body("Este tópico está resolvido ou fechado. Não é possivel enviar novas respostas para ele.");
         answerRepository.save(newAnswer);
