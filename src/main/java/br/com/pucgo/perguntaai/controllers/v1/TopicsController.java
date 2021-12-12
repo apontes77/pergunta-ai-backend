@@ -2,12 +2,11 @@ package br.com.pucgo.perguntaai.controllers.v1;
 
 import br.com.pucgo.perguntaai.models.DTO.TopicDto;
 import br.com.pucgo.perguntaai.models.DTO.TopicDtoDetails;
-import br.com.pucgo.perguntaai.models.form.TopicFormUpdate;
 import br.com.pucgo.perguntaai.models.Topic;
 import br.com.pucgo.perguntaai.models.enums.TopicStatus;
 import br.com.pucgo.perguntaai.models.form.TopicForm;
+import br.com.pucgo.perguntaai.models.form.TopicFormUpdate;
 import br.com.pucgo.perguntaai.repositories.TopicRepository;
-import br.com.pucgo.perguntaai.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,6 +23,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,18 +33,14 @@ import java.util.Optional;
 public class TopicsController {
 
     private final TopicRepository topicRepository;
-    private final UserRepository userRepository;
 
     @ApiResponse(description = "retorna os tópicos do fórum")
     @GetMapping
     @Operation(summary = "list topics", security = @SecurityRequirement(name = "bearerAuth"))
-    public Page<TopicDto> list(@RequestParam(required = false) String status,
-                               @Parameter(hidden = true) @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pagination) {
-        final Page<Topic> topicPage;
+    public List<TopicDto> list(@RequestParam(required = false) String status) {
+         List<Topic> topicPage = new ArrayList<>();
         if (status == null) {
-            topicPage = topicRepository.findAll(pagination);
-        } else {
-            topicPage = topicRepository.findByStatus(status, pagination);
+            topicPage = topicRepository.findAll();
         }
         return TopicDto.convert(topicPage);
     }
